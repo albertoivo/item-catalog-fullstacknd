@@ -16,12 +16,12 @@ session = DBSession()
 # JSON APIs to view Restaurant Information
 @app.route('/catalog.json')
 def catalogJSON():
-    catalog_all = session.query(Category).all()
-    items_all = session.query(Item).all()
-    catalog = {"Category": [cate.serialize for cate in catalog_all]}
-    for cate in catalog["Category"]:
-        cate["Item"] = [
-            item.serialize for item in items_all if item.cat_id == cate['id']]
+    categories = session.query(Category).all()
+    items = session.query(Item).all()
+    catalog = {"Category": [cat.serialize for cat in categories]}
+    for cat in catalog["Category"]:
+        cat["Item"] = [
+            item.serialize for item in items if item.cat_id == cat['id']]
     return jsonify(catalog)
 
 
