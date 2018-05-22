@@ -1,5 +1,5 @@
-from flask import Flask, jsonify
-from sqlalchemy import create_engine
+from flask import Flask, jsonify, render_template
+from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Item
 
@@ -13,6 +13,25 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
+# Main screen
+@app.route('/')
+def main():
+    categories = session.query(Category).order_by(asc(Category.name))
+    return render_template('catalog.html')
+
+
+# Get all Items by a selected Category
+@app.route('/catalog/<string:category_name>/items')
+def getItemsByCategory(category_name):
+    return render_template('items_by_category.html')
+
+
+# Get the selected item description
+@app.route('/catalog/<string:category_name>/<string:item_title>')
+def getItem(category_name, item_title):
+    return render_template('item.html')
+
+
 # JSON APIs to view Catalog Information
 @app.route('/catalog.json')
 def catalogJSON():
@@ -20,7 +39,7 @@ def catalogJSON():
     items = session.query(Item).all()
     catalog = {"Category": [cat.serialize for cat in categories]}
     for cat in catalog["Category"]:
-        cat["Item"] = [
+        cat["item"] = [
             item.serialize for item in items if item.cat_id == cat['id']]
     return jsonify(catalog)
 
