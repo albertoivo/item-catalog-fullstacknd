@@ -1,5 +1,9 @@
 {% extends "main.html" %} {% block content %}
 
-<h1>Catalog.html</h1>
+<ul>
+  {% for cat in categories %}
+  <li>{{ cat.name }}</li>
+  {% endfor %}
+</ul>
 
 {% endblock %}
