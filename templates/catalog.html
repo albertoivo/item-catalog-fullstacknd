@@ -1,9 +1,16 @@
 {% extends "main.html" %} {% block content %}
 
-<ul>
-  {% for cat in categories %}
-  <li>{{ cat.name }}</li>
-  {% endfor %}
-</ul>
+<div id="categories" class="shadow">
+  <ul>
+    {% for cat in categories %}
+    <li>{{ cat.name }}</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<div id="items" class="shadow">
+
+</div>
+
 
 {% endblock %}

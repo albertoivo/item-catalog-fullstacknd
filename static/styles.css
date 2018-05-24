@@ -3,6 +3,13 @@
   --main-ftcolor: white;
 }
 
+html, body {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 10px;
+  background-color: #ffeead;
+}
+
 body {
   margin: 0px;
 }
@@ -34,10 +41,6 @@ footer {
   background-color: var(--main-bgcolor);
   color: var(--main-ftcolor);
   padding-bottom: 5px;
-}
-
-.jumbotron {
-  max-width: 100%;
 }
 
 a {
@@ -85,4 +88,20 @@ p {
 .hover-red:hover {
   color: #fff !important;
   background-color: #f44336 !important;
+}
+
+#categories {
+  width: 300px;
+  margin: 10px;
+}
+
+#items {
+  width: 300px;
+  margin: 10px;
+}
+
+.shadow {
+  -webkit-box-shadow: 5px 5px 5px #666;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+     -moz-box-shadow: 5px 5px 5px #666;  /* Firefox 3.5 - 3.6 */
+          box-shadow: 5px 5px 5px #666;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
 }
