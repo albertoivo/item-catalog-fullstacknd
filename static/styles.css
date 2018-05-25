@@ -16,8 +16,8 @@ body {
 
 .container {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-around;
+  flex-wrap: wrap;
   margin-top: 46px;
 }
 
@@ -91,12 +91,14 @@ p {
 }
 
 #categories {
-  width: 300px;
+  flex: 1;
+  min-width: 100px;
   margin: 10px;
 }
 
 #items {
-  width: 300px;
+  flex: 3;
+  min-width: 300px;
   margin: 10px;
 }
 
