@@ -10,8 +10,11 @@
 
 <div id="items" class="shadow">
   <ul>
-    {% for item in latest_items %}
-    <li>{{ item.title }}</li>
+    {% for item in items %}
+    <li>
+      <span id="item-title">{{ item.title }}</span>
+      <span id="item-category">( {{item.category.name }} )</span>
+    </li>
     {% endfor %}
   </ul>
 </div>

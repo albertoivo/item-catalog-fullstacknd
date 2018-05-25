@@ -3,11 +3,11 @@
   --main-ftcolor: white;
 }
 
-html, body {
+html,
+body {
   box-sizing: border-box;
   height: 100%;
   padding: 10px;
-  background-color: #ffeead;
 }
 
 body {
@@ -52,7 +52,7 @@ p {
   color: var(--main-ftcolor);
 }
 
-.bar>a {
+.bar > a {
   padding: 12px 24px;
   float: left;
 }
@@ -94,16 +94,26 @@ p {
   flex: 1;
   min-width: 100px;
   margin: 10px;
+  background-color: #ffeead;
 }
 
 #items {
   flex: 3;
   min-width: 300px;
   margin: 10px;
+  background-color: #ffeead;
 }
 
 .shadow {
-  -webkit-box-shadow: 5px 5px 5px #666;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-     -moz-box-shadow: 5px 5px 5px #666;  /* Firefox 3.5 - 3.6 */
-          box-shadow: 5px 5px 5px #666;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+  -webkit-box-shadow: 5px 5px 5px #666; /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+  -moz-box-shadow: 5px 5px 5px #666; /* Firefox 3.5 - 3.6 */
+  box-shadow: 5px 5px 5px #666; /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+}
+
+#item-title {
+  font-weight: bolder;
+}
+
+#item-description {
+  color: gray;
 }
