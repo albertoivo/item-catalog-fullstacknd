@@ -210,20 +210,27 @@ def gdisconnect():
 @app.route('/')
 def main():
     cats = Category.query.all()
-    items = Item.query.all()
-    return render_template('catalog.html', categories=cats, latest_items=items)
+    latest_items = Item.query.order_by(Item.created.desc()).limit(10).all()
+    return render_template('catalog.html', categories=cats, items=latest_items)
 
 
 # Get all Items by a selected Category
 @app.route('/catalog/<string:category_name>/items')
 def getItemsByCategory(category_name):
-    return render_template('items_by_category.html')
+    cats = Category.query.all()
+    cat = Category.query.filter_by(name=category_name).first()
+    items_by_category = Item.query.filter_by(category=cat).all()
+    return render_template('catalog.html', categories=cats, items=items_by_category)
 
 
 # Get the selected item description
 @app.route('/catalog/<string:category_name>/<string:item_title>')
 def getItem(category_name, item_title):
-    return render_template('item.html')
+    cats = Category.query.all()
+    cat = Category.query.filter_by(name=category_name).first()
+    item = Item.query.filter_by(title=item_title, category=cat).first()
+    print item
+    return render_template('item.html', categories=cats, item=item)
 
 
 # JSON APIs to view Catalog Information
