@@ -1,9 +1,7 @@
 from flask import Flask, jsonify, render_template
 from flask import session as login_session
-
-from sqlalchemy import create_engine, asc
-from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Category, Item
+from flask_sqlalchemy import SQLAlchemy
+from database_setup import Category, Item
 
 import random
 import string
@@ -12,23 +10,17 @@ import json
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 
-
-app = Flask(__name__)
-
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Catalog Item Application"
 
-# Connect to Database and create database session
-engine = create_engine('sqlite:///itemcatalog.db')
-Base.metadata.bind = engine
 
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///itemcatalog.db'
+db = SQLAlchemy(app)
+
 
 # Create anti-forgery state token
-
-
 @app.route('/login')
 def showLogin():
     state = ''.join(
@@ -182,8 +174,6 @@ def getUserID(email):
         return None
 
 # DISCONNECT - Revoke a current user's token and reset their login_session
-
-
 @app.route('/gdisconnect')
 def gdisconnect():
     # Only disconnect a connected user.
@@ -219,7 +209,7 @@ def gdisconnect():
 # Main screen
 @app.route('/')
 def main():
-    cats = session.query(Category).order_by(asc(Category.name))
+    cats = Category.query.all()
     return render_template('catalog.html', categories=cats)
 
 
@@ -238,8 +228,8 @@ def getItem(category_name, item_title):
 # JSON APIs to view Catalog Information
 @app.route('/catalog.json')
 def catalogJSON():
-    categories = session.query(Category).all()
-    items = session.query(Item).all()
+    categories = Category.query.all()
+    items = Item.query.all()
     catalog = {"Category": [cat.serialize for cat in categories]}
     for cat in catalog["Category"]:
         cat["item"] = [

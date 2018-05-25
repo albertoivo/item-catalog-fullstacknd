@@ -1,17 +1,16 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
-from sqlalchemy.dialects.sqlite import BLOB
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-from sqlalchemy import create_engine
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
-Base = declarative_base()
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///itemcatalog.db'
+db = SQLAlchemy(app)
 
 
-class Category(Base):
+class Category(db.Model):
     __tablename__ = 'category'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(250), nullable=False)
 
     @property
     def serialize(self):
@@ -20,16 +19,19 @@ class Category(Base):
             'name': self.name,
         }
 
+    def __repr__(self):
+        return '<Category %r>' % self.name
 
-class Item(Base):
+
+class Item(db.Model):
     __tablename__ = 'item'
 
-    id = Column(Integer, primary_key=True)
-    title = Column(String(250), nullable=False)
-    description = Column(String(250), nullable=False)
-    picture = Column(BLOB)
-    cat_id = Column(Integer, ForeignKey('category.id'))
-    category = relationship(Category)
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(250), nullable=False)
+    description = db.Column(db.String(250), nullable=False)
+    picture = db.Column(db.BLOB)
+    cat_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    category = db.relationship(Category)
 
     @property
     def serialize(self):
@@ -41,8 +43,5 @@ class Item(Base):
             'cat_id': self.cat_id
         }
 
-
-engine = create_engine('sqlite:///itemcatalog.db')
-
-
-Base.metadata.create_all(engine)
+    def __repr__(self):
+        return '<Item %r>' % self.title
