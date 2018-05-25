@@ -7,7 +7,6 @@ html,
 body {
   box-sizing: border-box;
   height: 100%;
-  padding: 10px;
 }
 
 body {
@@ -35,6 +34,11 @@ footer {
   padding: 16px;
 }
 
+.logo {
+  font-style: oblique;
+  font-variant: small-caps;
+}
+
 .bar {
   width: 100%;
   overflow: hidden;
@@ -48,8 +52,9 @@ a {
   color: var(--main-ftcolor);
 }
 
-p {
-  color: var(--main-ftcolor);
+h1, h2, p{
+  color: var(--main-bgcolor);
+  margin: 10px;
 }
 
 .bar > a {
@@ -110,10 +115,23 @@ p {
   box-shadow: 5px 5px 5px #666; /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
 }
 
-#item-title {
+.category-name {
   font-weight: bolder;
+  margin-left: 20px;
+  color: var(--main-bgcolor);
 }
 
-#item-description {
+.item-title {
+  font-weight: bolder;
+  margin-left: 10px;
+  color: var(--main-bgcolor);
+}
+
+.item-category {
+  font-style: italic;
+  color: gray;
+}
+
+.item-description {
   color: gray;
 }

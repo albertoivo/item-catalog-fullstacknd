@@ -1,19 +1,17 @@
 {% extends "main.html" %} {% block content %}
 
 <div id="categories" class="shadow">
-    <ul>
-        {% for cat in categories %}
-        <li>{{ cat.name }}</li>
-        {% endfor %}
-    </ul>
+    {% for cat in categories %}
+    <h3>{{ cat.name }}</h3>
+    {% endfor %}
 </div>
 
 <div id="items" class="shadow">
     {% if item %}
-    <h1 id="item-title">{{ item.title }}</h1>
-    <h3 id="item-description">{{ item.description }}</h3>
+    <h1 class="item-title">{{ item.title }}</h1>
+    <h3 class="item-description">{{ item.description }}</h3>
     {% else %}
-    <h3 id="item-description">No items in this category with this name.</h3>
+    <h3 class="item-description">No items in this category with this name.</h3>
     {% endif %}
 </div>
 
