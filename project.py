@@ -210,7 +210,8 @@ def gdisconnect():
 @app.route('/')
 def main():
     cats = Category.query.all()
-    return render_template('catalog.html', categories=cats)
+    items = Item.query.all()
+    return render_template('catalog.html', categories=cats, latest_items=items)
 
 
 # Get all Items by a selected Category
