@@ -9,7 +9,11 @@
 </div>
 
 <div id="items" class="shadow">
-  <label>oi</label>
+  <ul>
+    {% for item in latest_items %}
+    <li>{{ item.title }}</li>
+    {% endfor %}
+  </ul>
 </div>
 
 {% endblock %}
