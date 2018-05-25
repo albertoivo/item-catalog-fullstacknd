@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///itemcatalog.db'
@@ -10,7 +11,7 @@ class Category(db.Model):
     __tablename__ = 'category'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(250), nullable=False)
+    name = db.Column(db.String(250), unique=True, nullable=False)
 
     @property
     def serialize(self):
@@ -30,6 +31,7 @@ class Item(db.Model):
     title = db.Column(db.String(250), nullable=False)
     description = db.Column(db.String(250), nullable=False)
     picture = db.Column(db.BLOB)
+    created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
     cat_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     category = db.relationship(Category)
 
@@ -45,3 +47,7 @@ class Item(db.Model):
 
     def __repr__(self):
         return '<Item %r>' % self.title
+
+
+# Create the initial database
+db.create_all()
