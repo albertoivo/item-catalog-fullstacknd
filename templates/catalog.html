@@ -1,12 +1,5 @@
 {% extends "main.html" %} {% block content %}
 
-<div id="categories" class="shadow">
-  <h1>Categories</h1>
-    {% for cat in categories %}
-    <h3 class="category-name">{{ cat.name }}</h3>
-    {% endfor %}
-</div>
-
 <div id="items" class="shadow">
   <h1>Latest items</h1>
     {% for item in items %}

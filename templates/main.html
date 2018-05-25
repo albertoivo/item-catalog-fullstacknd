@@ -32,8 +32,16 @@
   </nav>
 
   <div class="container">
+    <div id="categories" class="shadow">
+      <h1>Categories</h1>
+      {% for cat in categories %}
+      <h3 class="category-name">{{ cat.name }}</h3>
+      {% endfor %}
+    </div>
     {% block content %} {% endblock %}
   </div>
+
+  <script src="{{ url_for('static', filename='utils.js') }}"></script>
 
 </body>
 
