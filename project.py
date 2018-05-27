@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request, flash
 from flask import session as login_session
 from flask_sqlalchemy import SQLAlchemy
 from database_setup import Category, Item
@@ -6,6 +6,8 @@ from database_setup import Category, Item
 import random
 import string
 import json
+import httplib2
+import requests
 
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
@@ -174,6 +176,8 @@ def getUserID(email):
         return None
 
 # DISCONNECT - Revoke a current user's token and reset their login_session
+
+
 @app.route('/gdisconnect')
 def gdisconnect():
     # Only disconnect a connected user.

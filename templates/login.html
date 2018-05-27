@@ -14,10 +14,9 @@
 
 <script>
   function signInCallback(authResult) {
-    console.log('authResult: ', authResult)
+
     if (authResult['code']) {
-      console.log('fez o callback')
-        // Hide the sign-in button now that the user is authorized
+      // Hide the sign-in button now that the user is authorized
       $('#signinButton').attr('style', 'display: none');
       // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
       $.ajax({
@@ -32,7 +31,7 @@
             $('#result').html('Login Successful!</br>' + result + '</br>Redirecting...')
             setTimeout(function() {
               window.location.href = "/";
-            }, 1000);
+            }, 2000);
           } else if (authResult['error']) {
             console.log('There was an error: ' + authResult['error']);
           } else {
@@ -40,8 +39,6 @@
           }
         }
       });
-    } else {
-      console.log('fudeu')
     }
   }
 </script>
