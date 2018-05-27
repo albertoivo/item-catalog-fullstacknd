@@ -52,12 +52,7 @@ a {
   color: var(--main-ftcolor);
 }
 
-h1, h2, p{
-  color: var(--main-bgcolor);
-  margin: 10px;
-}
-
-.bar > a {
+.bar>a {
   padding: 12px 24px;
   float: left;
 }
@@ -110,9 +105,16 @@ h1, h2, p{
 }
 
 .shadow {
-  -webkit-box-shadow: 5px 5px 5px #666; /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-  -moz-box-shadow: 5px 5px 5px #666; /* Firefox 3.5 - 3.6 */
-  box-shadow: 5px 5px 5px #666; /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+  -webkit-box-shadow: 5px 5px 5px #666;
+  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+  -moz-box-shadow: 5px 5px 5px #666;
+  /* Firefox 3.5 - 3.6 */
+  box-shadow: 5px 5px 5px #666;
+  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+}
+
+.card-header {
+  margin-left: 10px;
 }
 
 .category-name {
@@ -123,7 +125,7 @@ h1, h2, p{
 
 .item-title {
   font-weight: bolder;
-  margin-left: 10px;
+  margin-left: 20px;
   color: var(--main-bgcolor);
 }
 
@@ -139,18 +141,18 @@ h1, h2, p{
 
 @media screen and (min-width: 641px) and (max-width: 768px) {
   .hide-mobile {
-      display: none;
+    display: none;
   }
 }
 
 @media screen and (min-width: 769px) {
   .hide-desktop {
-      display: none;
+    display: none;
   }
 }
 
 @media screen and (min-width: 1280px) {
   .hide-desktop {
-      display: none;
+    display: none;
   }
 }

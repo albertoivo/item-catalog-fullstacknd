@@ -33,7 +33,7 @@
 
   <div class="container">
     <div id="categories" class="shadow">
-      <h1>Categories</h1>
+      <h1 class="card-header">Categories</h1>
       {% for cat in categories %}
       <h3 class="category-name">{{ cat.name }}</h3>
       {% endfor %}
@@ -41,6 +41,7 @@
     {% block content %} {% endblock %}
   </div>
 
+  <!-- Calling script for navbar -->
   <script src="{{ url_for('static', filename='utils.js') }}"></script>
 
 </body>
