@@ -1,7 +1,10 @@
-from flask import Flask, jsonify, render_template, request, flash
+from flask import Flask, jsonify, render_template, request
+from flask import flash, make_response
 from flask import session as login_session
+
 from flask_sqlalchemy import SQLAlchemy
-from database_setup import Category, Item
+
+from database_setup import Category, Item, User, db
 
 import random
 import string
@@ -34,7 +37,6 @@ def showLogin():
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
-    print 'entrou no gconnect....'
     # Validate state token
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter.'), 401)
@@ -157,27 +159,27 @@ def gconnect():
 def createUser(login_session):
     newUser = User(name=login_session['username'], email=login_session[
                    'email'], picture=login_session['picture'])
-    session.add(newUser)
-    session.commit()
-    user = session.query(User).filter_by(email=login_session['email']).one()
+    db.session.add(newUser)
+    db.session.commit()
+    user = db.session.query(User).filter_by(email=login_session['email']).one()
     return user.id
 
 
 def getUserInfo(user_id):
-    user = session.query(User).filter_by(id=user_id).one()
+    user = db.session.query(User).filter_by(id=user_id).one()
     return user
 
 
 def getUserID(email):
+
     try:
-        user = session.query(User).filter_by(email=email).one()
+        user = db.session.query(User).filter_by(email=email).one()
         return user.id
     except:
         return None
 
+
 # DISCONNECT - Revoke a current user's token and reset their login_session
-
-
 @app.route('/gdisconnect')
 def gdisconnect():
     # Only disconnect a connected user.
@@ -215,7 +217,7 @@ def gdisconnect():
 def main():
     cats = Category.query.all()
     latest_items = Item.query.order_by(Item.created.desc()).limit(10).all()
-    return render_template('catalog.html', categories=cats, items=latest_items)
+    return render_template('catalog.html', categories=cats, items=latest_items, login_session=login_session)
 
 
 # Get all Items by a selected Category
