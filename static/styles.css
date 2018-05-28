@@ -97,6 +97,10 @@ a {
   background-color: #ffeead;
 }
 
+#welcome {
+  line-height: 40px;
+}
+
 #logout {
   font-size: 10px;
   font-style: italic;
