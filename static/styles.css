@@ -97,6 +97,11 @@ a {
   background-color: #ffeead;
 }
 
+#logout {
+  font-size: 10px;
+  font-style: italic;
+}
+
 #items {
   flex: 3;
   min-width: 300px;

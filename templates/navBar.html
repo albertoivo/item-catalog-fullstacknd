@@ -7,8 +7,8 @@
         {% if 'username' not in login_session %}
         <a class="hide-mobile hover-red right" href="{{url_for('showLogin')}}">Login</a>
         {% else %}
-        <span class="hide-mobile right">Welcome, {{login_session['username']}}</span>
-        <a class="hide-mobile hover-red right" href='/logout'>Logout</a>
+        <a id="logout" class="hide-mobile hover-red right" href='/logout'>(Logout)</a>
+        <span id="welcome" class="hide-mobile right">Welcome, {{login_session['username']}}</span>
         {% endif %}
     </div>
 
