@@ -179,6 +179,12 @@ def getUserID(email):
     except:
         return None
 
+def delLoginSession(login_session):
+    del login_session['access_token']
+    del login_session['gplus_id']
+    del login_session['username']
+    del login_session['email']
+    del login_session['picture']
 
 # DISCONNECT - Revoke a current user's token and reset their login_session
 @app.route('/logout')
@@ -196,16 +202,15 @@ def gdisconnect():
     result = h.request(url, 'GET')[0]
     if result['status'] == '200':
         # Reset the user's sesson.
-        del login_session['access_token']
-        del login_session['gplus_id']
-        del login_session['username']
-        del login_session['email']
-        del login_session['picture']
+        delLoginSession(login_session)
 
         # response = make_response(json.dumps('Successfully disconnected.'), 200)
         # response.headers['Content-Type'] = 'application/json'
         return redirect('/')#, response
     else:
+        # Reset the user's sesson.
+        delLoginSession(login_session)
+
         # For whatever reason, the given token was invalid.
         response = make_response(
             json.dumps('Failed to revoke token for given user.', 400))
