@@ -115,6 +115,7 @@ a {
 
 .card-header {
   margin-left: 10px;
+  color: var(--main-bgcolor);
 }
 
 .category-name {
