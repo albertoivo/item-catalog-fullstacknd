@@ -204,8 +204,7 @@ def gdisconnect():
 
         # response = make_response(json.dumps('Successfully disconnected.'), 200)
         # response.headers['Content-Type'] = 'application/json'
-        # return response
-        return redirect('/')
+        return redirect('/')#, response
     else:
         # For whatever reason, the given token was invalid.
         response = make_response(

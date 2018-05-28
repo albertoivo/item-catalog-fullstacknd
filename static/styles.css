@@ -92,7 +92,7 @@ a {
 
 #categories {
   flex: 1;
-  min-width: 100px;
+  min-width: 170px;
   margin: 10px;
   background-color: #ffeead;
 }
@@ -118,8 +118,10 @@ a {
 }
 
 .category-name {
+  display: block;
   font-weight: bolder;
   margin-left: 20px;
+  margin-bottom: 10px;
   color: var(--main-bgcolor);
 }
 
