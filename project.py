@@ -21,6 +21,7 @@ APPLICATION_NAME = "Catalog Item Application"
 
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///itemcatalog.db'
 db = SQLAlchemy(app)
 
@@ -192,7 +193,6 @@ def gdisconnect():
 
     url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
     h = httplib2.Http()
-    print h.request(url, 'GET')
     result = h.request(url, 'GET')[0]
     if result['status'] == '200':
         # Reset the user's sesson.
@@ -218,7 +218,7 @@ def gdisconnect():
 def main():
     cats = Category.query.all()
     latest_items = Item.query.order_by(Item.created.desc()).limit(10).all()
-    return render_template('catalog.html', categories=cats, items=latest_items, login_session=login_session)
+    return render_template('catalog.html', categories=cats, items=latest_items, main_screen=True, login_session=login_session)
 
 
 # Get all Items by a selected Category
@@ -236,7 +236,6 @@ def getItem(category_name, item_title):
     cats = Category.query.all()
     cat = Category.query.filter_by(name=category_name).first()
     item = Item.query.filter_by(title=item_title, category=cat).first()
-    print item
     return render_template('item.html', categories=cats, item=item)
 
 
