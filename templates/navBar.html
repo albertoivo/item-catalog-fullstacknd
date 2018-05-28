@@ -1,0 +1,24 @@
+<nav>
+    <div class="bar">
+        <a class="hide-desktop right" href="javascript:void(0)" onclick="toggleMenu()">
+            <i class="fa fa-bars"></i>
+        </a>
+        <a class="logo" href="/">Catalog</a>
+        {% if 'username' not in login_session %}
+        <a class="hide-mobile hover-red right" href="{{url_for('showLogin')}}">Login</a>
+        {% else %}
+        <span class="hide-mobile right">Welcome, {{login_session['username']}}</span>
+        <a class="hide-mobile hover-red right" href='/logout'>Logout</a>
+        {% endif %}
+    </div>
+
+    <!-- Navbar on small screens -->
+    <div id="bar-mobile" class="bar-block hide-desktop menu-mobile" style="margin-top:46px ">
+        {% if 'username' not in login_session %}
+        <a href="{{url_for('showLogin')}}" class="bar-item button hover-red">Login</a>
+        {% else %}
+        <span class="bar-item button">Welcome, {{login_session['username']}}</span>
+        <a class="hide-mobile hover-red right" href='/logout'>Logout</a>
+        {% endif %}
+    </div>
+</nav>

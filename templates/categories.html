@@ -1,0 +1,8 @@
+<div id="categories" class="shadow">
+    <a href="/">
+        <h1 class="card-header">Categories</h1>
+    </a>
+    {% for cat in categories %}
+    <a href="{{url_for('getItemsByCategory', category_name=cat.name)}}" class="category-name">{{ cat.name }}</a>
+    {% endfor %}
+</div>

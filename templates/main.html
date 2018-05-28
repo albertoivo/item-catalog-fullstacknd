@@ -15,33 +15,11 @@
 </head>
 
 <body>
-  <nav>
-    <div class="bar">
-      <a class="hide-desktop right" href="javascript:void(0)" onclick="toggleMenu()">
-        <i class="fa fa-bars"></i>
-      </a>
-      <a class="logo" href="/">Catalog</a> {% if 'username' not in login_session %}
-      <a href="{{url_for('showLogin')}}">Login</a> {% else %}
-      <span>Welcome, {{login_session['username']}}</span>
-      <a href='/logout'>Logout</a> {% endif %}
-    </div>
-
-    <!-- Navbar on small screens -->
-    <div id=" bar-mobile " class="bar-block hide-desktop menu-mobile " style="margin-top:46px ">
-      <a href="/contact " class="bar-item button ">Contact</a>
-      <a href="# " class="bar-item button hover-red ">Login</a>
-    </div>
-  </nav>
+  <!-- NAV BAR -->
+  {% include 'navBar.html' %}
 
   <div class="container">
-    <div id="categories" class="shadow">
-      <a href="/">
-        <h1 class="card-header">Categories</h1>
-      </a>
-      {% for cat in categories %}
-      <a href="{{url_for('getItemsByCategory', category_name=cat.name)}}" class="category-name">{{ cat.name }}</a>
-      {% endfor %}
-    </div>
+    {% include 'categories.html' %}
     {% block content %} {% endblock %}
   </div>
 
