@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template, request
-from flask import flash, make_response
+from flask import flash, make_response, redirect
 from flask import session as login_session
 
 from flask_sqlalchemy import SQLAlchemy
@@ -180,7 +180,7 @@ def getUserID(email):
 
 
 # DISCONNECT - Revoke a current user's token and reset their login_session
-@app.route('/gdisconnect')
+@app.route('/logout')
 def gdisconnect():
     # Only disconnect a connected user.
     access_token = login_session.get('access_token')
@@ -189,10 +189,11 @@ def gdisconnect():
             json.dumps('Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
+
     url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
     h = httplib2.Http()
+    print h.request(url, 'GET')
     result = h.request(url, 'GET')[0]
-
     if result['status'] == '200':
         # Reset the user's sesson.
         del login_session['access_token']
@@ -201,9 +202,10 @@ def gdisconnect():
         del login_session['email']
         del login_session['picture']
 
-        response = make_response(json.dumps('Successfully disconnected.'), 200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        # response = make_response(json.dumps('Successfully disconnected.'), 200)
+        # response.headers['Content-Type'] = 'application/json'
+        # return response
+        return redirect('/')
     else:
         # For whatever reason, the given token was invalid.
         response = make_response(

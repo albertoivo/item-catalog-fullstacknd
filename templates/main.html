@@ -22,8 +22,8 @@
       </a>
       <a class="logo" href="/">Catalog</a> {% if 'username' not in login_session %}
       <a href="{{url_for('showLogin')}}">Login</a> {% else %}
-      <h1>Welcome, {{login_session['username']}}</h1>
-      <a href='#'>Logout</a> {% endif %}
+      <span>Welcome, {{login_session['username']}}</span>
+      <a href='/logout'>Logout</a> {% endif %}
     </div>
 
     <!-- Navbar on small screens -->
