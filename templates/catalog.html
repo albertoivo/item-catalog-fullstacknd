@@ -4,8 +4,8 @@
   <h1 class="card-header">Latest items</h1>
   {% for item in items %}
   <p>
-    <span class="item-title">{{ item.title }}</span>
-    <span class="item-category">( {{item.category.name }} )</span>
+    <a href="{{url_for('getItem', category_name=item.category.name, item_title=item.title)}}" class="item-title">{{ item.title }}</a>
+    <a class="item-category">( {{item.category.name }} )</a>
   </p>
   {% endfor %}
 </div>

@@ -2,7 +2,9 @@
 
 <div id="items" class="shadow">
     {% if item %}
-    <h1 class="item-title">{{ item.title }}</h1>
+    <h1 style="float:left" class="item-title">{{ item.title }}</h1>
+    <h4 class="item-category">({{ item.category.name }})</h4>
+    <br clear="all" />
     <h3 class="item-description">{{ item.description }}</h3>
     {% else %}
     <h3 class="item-description">No items in this category with this name.</h3>
