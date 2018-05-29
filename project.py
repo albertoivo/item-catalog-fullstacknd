@@ -14,8 +14,7 @@ import json
 import httplib2
 import requests
 
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.client import FlowExchangeError
+from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
@@ -32,7 +31,8 @@ db = SQLAlchemy(app)
 @app.route('/login')
 def showLogin():
     state = ''.join(
-        random.choice(string.ascii_uppercase + string.digits) for x in range(32))
+        random.choice(string.ascii_uppercase + string.digits)
+        for x in range(32))
     login_session['state'] = state
     # return "The current session state is %s" % login_session['state']
     return render_template('login.html', STATE=state)
@@ -131,7 +131,7 @@ def gconnect():
         if not user_id:
             user_id = createUser(login_session)
         login_session['user_id'] = user_id
-    except:
+    except Exception:
         pass
 
     # Get user info
@@ -151,7 +151,7 @@ def gconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+    output += '" style = "width: 300px; height: 300px; border-radius: 150px;>'
     flash("you are now logged in as %s" % login_session['username'])
 
     return output
@@ -175,9 +175,10 @@ def gdisconnect():
         # Reset the user's sesson.
         delLoginSession(login_session)
 
-        # response = make_response(json.dumps('Successfully disconnected.'), 200)
+        # response = make_response(
+        #   json.dumps('Successfully disconnected.'), 200)
         # response.headers['Content-Type'] = 'application/json'
-        return redirect('/')#, response
+        return redirect('/')  # , response
     else:
         # Reset the user's sesson.
         delLoginSession(login_session)
@@ -194,7 +195,8 @@ def gdisconnect():
 def main():
     cats = Category.query.all()
     latest_items = Item.query.order_by(Item.created.desc()).limit(10).all()
-    return render_template('catalog.html', categories=cats, items=latest_items, main_screen=True, login_session=login_session)
+    return render_template('catalog.html', categories=cats, items=latest_items,
+                           main_screen=True, login_session=login_session)
 
 
 # Get all Items by a selected Category
@@ -203,7 +205,8 @@ def getItemsByCategory(category_name):
     cats = Category.query.all()
     cat = Category.query.filter_by(name=category_name).first()
     items_by_category = Item.query.filter_by(category=cat).all()
-    return render_template('catalog.html', categories=cats, items=items_by_category)
+    return render_template('catalog.html', categories=cats,
+                           items=items_by_category)
 
 
 # Get the selected item description
@@ -215,7 +218,7 @@ def getItem(category_name, item_title):
     return render_template('item.html', categories=cats, item=item)
 
 
-@app.route('/category/new', methods=['GET','POST'])
+@app.route('/category/new', methods=['GET', 'POST'])
 def newCategory():
     if 'username' not in login_session:
         return render_template('forbidden.html')
@@ -225,7 +228,7 @@ def newCategory():
         return render_template('new_category.html')
 
 
-@app.route('/item/new', methods=['GET','POST'])
+@app.route('/item/new', methods=['GET', 'POST'])
 def newItem():
     if 'username' not in login_session:
         return render_template('forbidden.html')

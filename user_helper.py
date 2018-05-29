@@ -16,11 +16,10 @@ def getUserInfo(user_id):
 
 
 def getUserID(email):
-
     try:
         user = db.session.query(User).filter_by(email=email).one()
         return user.id
-    except:
+    except Exception:
         return None
 
 
