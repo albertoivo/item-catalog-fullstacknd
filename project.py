@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template, request
-from flask import flash, make_response, redirect
+from flask import flash, make_response, redirect, url_for
 from flask import session as login_session
 
 from flask_sqlalchemy import SQLAlchemy
@@ -239,6 +239,17 @@ def newItem():
         return redirect(url_for('main'))
     else:
         return render_template('new_item.html')
+
+
+# Delete Item
+@app.route('/item/<string:item_id>/delete', methods=['GET', 'POST'])
+def deleteItem(item_id):
+    item = Item.query.filter_by(id=item_id).first()
+    cat_name = item.category.name
+    current_db_sessions = db.object_session(item)
+    current_db_sessions.delete(item)
+    current_db_sessions.commit()
+    return redirect(url_for('getItemsByCategory', category_name=cat_name))
 
 
 # JSON APIs to view Catalog Information
