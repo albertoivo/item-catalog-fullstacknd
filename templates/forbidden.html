@@ -1,1 +1,7 @@
-<h1>Você não tem permissão para acessar esta página!</h1>
+{% extends "main.html" %}
+
+{% block content %}
+
+<img id="keep-off" src="{{ url_for( 'static', filename='img/keep-off.png' ) }} " alt="KEEP OFF" />
+
+{% endblock %}

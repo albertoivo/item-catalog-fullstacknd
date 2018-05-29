@@ -222,7 +222,7 @@ def newCategory():
     if request.method == 'POST':
         return redirect(url_for('main'))
     else:
-        return render_template('newCategory.html')
+        return render_template('new_category.html')
 
 
 @app.route('/item/new', methods=['GET','POST'])
@@ -232,7 +232,7 @@ def newItem():
     if request.method == 'POST':
         return redirect(url_for('main'))
     else:
-        return render_template('newItem.html')
+        return render_template('new_item.html')
 
 
 # JSON APIs to view Catalog Information

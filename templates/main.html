@@ -10,21 +10,20 @@
   <meta name="author" content="Alberto Ivo Vieira">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/styles.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
   <!-- NAV BAR -->
-  {% include 'navBar.html' %}
+  {% include 'navbar.html' %}
 
   <div class="container">
-    {% include 'categories.html' %}
     {% block content %} {% endblock %}
   </div>
 
   <!-- Calling script for navbar -->
-  <script src="{{ url_for( 'static', filename='utils.js' ) }} "></script>
+  <script src="{{ url_for( 'static', filename='js/utils.js' ) }} "></script>
 
 </body>
 

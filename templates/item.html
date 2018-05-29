@@ -1,5 +1,7 @@
 {% extends "main.html" %} {% block content %}
 
+{% include 'categories.html' %}
+
 <div id="items" class="shadow">
     {% if item %}
     <h1 style="float:left" class="item-title">{{ item.title }}</h1>
