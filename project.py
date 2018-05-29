@@ -38,6 +38,7 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
+# Login - Google
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     # Validate state token
@@ -157,7 +158,7 @@ def gconnect():
     return output
 
 
-# DISCONNECT - Revoke a current user's token and reset their login_session
+# Logout - Revoke a current user's token and reset their login_session
 @app.route('/logout')
 def gdisconnect():
     # Only disconnect a connected user.
@@ -218,6 +219,7 @@ def getItem(category_name, item_title):
     return render_template('item.html', categories=cats, item=item)
 
 
+# Add Category
 @app.route('/category/new', methods=['GET', 'POST'])
 def newCategory():
     if 'username' not in login_session:
@@ -228,6 +230,7 @@ def newCategory():
         return render_template('new_category.html')
 
 
+# Add Item
 @app.route('/item/new', methods=['GET', 'POST'])
 def newItem():
     if 'username' not in login_session:
