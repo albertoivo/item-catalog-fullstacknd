@@ -197,7 +197,7 @@ def main():
     cats = Category.query.all()
     latest_items = Item.query.order_by(Item.created.desc()).limit(10).all()
     return render_template('catalog.html', categories=cats, items=latest_items,
-                           login_session=login_session)
+                           main_screen=True, login_session=login_session)
 
 
 # Get all Items by a selected Category
@@ -206,7 +206,7 @@ def getItemsByCategory(category_name):
     cats = Category.query.all()
     cat = Category.query.filter_by(name=category_name).first()
     items_by_category = Item.query.filter_by(category=cat).all()
-    return render_template('items_by_category.html', categories=cats,
+    return render_template('catalog.html', categories=cats,
                            items=items_by_category)
 
 

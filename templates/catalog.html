@@ -1,8 +1,1 @@
-{% extends "main.html" %} {% block content %}
-
-{% include 'categories.html' %}
-
-{% include 'latest_items.html' %}
-{% include 'items_by_category.html' %}
-
-{% endblock %}
+{% extends "main.html" %} {% block content %} {% include 'categories.html' %} {% if main_screen %} {% include 'latest_items.html' %} {% else %} {% include 'items_by_category.html' %} {% endif %} {% endblock %}
