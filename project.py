@@ -244,6 +244,26 @@ def getItem(category_name, item_title):
     return render_template('item.html', categories=cats, item=item)
 
 
+@app.route('/category/new', methods=['GET','POST'])
+def newCategory():
+    if 'username' not in login_session:
+        return render_template('forbidden.html')
+    if request.method == 'POST':
+        return redirect(url_for('main'))
+    else:
+        return render_template('newCategory.html')
+
+
+@app.route('/item/new', methods=['GET','POST'])
+def newItem():
+    if 'username' not in login_session:
+        return render_template('forbidden.html')
+    if request.method == 'POST':
+        return redirect(url_for('main'))
+    else:
+        return render_template('newItem.html')
+
+
 # JSON APIs to view Catalog Information
 @app.route('/catalog.json')
 def catalogJSON():
