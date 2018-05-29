@@ -5,13 +5,13 @@
             <i class="fa fa-bars"></i>
         </a>
         <a class="logo" href="/">Catalog</a>
-        <a href="#" class="hide-mobile">Add Category</a>
-        <a href="#" class="hide-mobile">Add Item</a>
         {% if 'username' not in login_session %}
         <a class="hide-mobile hover-red right" href="{{url_for('showLogin')}}">Login</a>
         {% else %}
         <a id="logout" class="hide-mobile hover-red right" href='/logout'>(Logout)</a>
         <span id="welcome" class="hide-mobile right">Welcome, {{login_session['username']}}</span>
+        <a href="#" class="hide-mobile">Add Category</a>
+        <a href="#" class="hide-mobile">Add Item</a>
         {% endif %}
     </div>
 
