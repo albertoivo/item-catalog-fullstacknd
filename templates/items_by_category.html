@@ -1,7 +1,11 @@
 <div id="items" class="shadow">
-    {% for item in items %}
-    <p>
-        <a href="{{url_for('getItem', category_name=item.category.name, item_title=item.title)}}" class="item-title">{{ item.title }}</a>
-    </p>
-    {% endfor %}
+  {% if items %}
+  <h1 class="card-header">{{ items[0].category.name }}</h1>
+  {% for item in items %}
+  <p>
+    <a href="{{url_for('getItem', category_name=item.category.name, item_title=item.title)}}" class="item-title">{{ item.title }}</a>
+  </p>
+  {% endfor %} {% else %}
+  <h3>There are no items for this category.</h3>
+  {% endif %}
 </div>
