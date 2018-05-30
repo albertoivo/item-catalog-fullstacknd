@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, render_template, request
 from flask import flash, make_response, redirect, url_for
 from flask import session as login_session
-
+from sqlalchemy import update
 from flask_sqlalchemy import SQLAlchemy
 
 from database_setup import Category, Item, User, db
@@ -36,14 +36,7 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
 
 db = SQLAlchemy(app)
 
-# Interceptor
-@app.teardown_request
-def teardown_request(exception):
-    if exception:
-        db.session.rollback()
-    else:
-        db.session.commit()
-    db.session.remove()
+
 
 
 def allowed_file(filename):
@@ -258,6 +251,26 @@ def newCategory():
         return redirect(url_for('main'))
     else:
         return render_template('new_category.html')
+
+
+@app.route('/category/<string:category_id>/edit', methods=['GET','POST'])
+def editCategory(category_id):
+    if 'username' not in login_session:
+        return render_template('forbidden.html')
+
+    if request.method == 'POST':
+        if request.form['name']:
+            cat = Category.query.filter_by(id=category_id).first()
+            cat.name = request.form['name']
+            db.session.commit()
+    else:
+        cat = Category.query.filter_by(id=category_id).first()
+        if cat:
+            return render_template('new_category.html', category=cat)
+        else:
+            return redirect(url_for('main'))
+
+    return redirect(url_for('main'))
 
 
 # Add Item
