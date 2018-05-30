@@ -262,7 +262,6 @@ def newItem():
     if 'username' not in login_session:
         return render_template('forbidden.html')
     if request.method == 'POST':
-        cat = Category.query.first()
         picture = request.files['picture']
         picture_path = ''
 
@@ -273,7 +272,7 @@ def newItem():
         newItem = Item(
             title=request.form['title'],
             description=request.form['description'],
-            cat_id=cat.id,
+            cat_id=request.form['category'],
             picture_path=picture_path
         )
 
