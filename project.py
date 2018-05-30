@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template, request
-from flask import flash, make_response, redirect
+from flask import flash, make_response, redirect, url_for
 from flask import session as login_session
 
 from flask_sqlalchemy import SQLAlchemy
@@ -24,7 +24,18 @@ APPLICATION_NAME = "Catalog Item Application"
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///itemcatalog.db'
+app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
+
 db = SQLAlchemy(app)
+
+#
+@app.teardown_request
+def teardown_request(exception):
+    if exception:
+        db.session.rollback()
+    else:
+        db.session.commit()
+    db.session.remove()
 
 
 # Create anti-forgery state token
@@ -236,7 +247,15 @@ def newItem():
     if 'username' not in login_session:
         return render_template('forbidden.html')
     if request.method == 'POST':
+        cat = Category.query.first()
+        newItem = Item(
+            title = request.form['title'],
+            description = request.form['description'],
+            cat_id = cat.id
+        )
+        db.session.add(newItem)
         return redirect(url_for('main'))
+        print "oi"
     else:
         return render_template('new_item.html')
 

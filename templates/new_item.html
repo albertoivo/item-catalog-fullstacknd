@@ -1,1 +1,29 @@
-<h1>new Item</h1>
+{% extends "main.html" %} {% block content %}
+
+<div id="items" class="shadow">
+
+    <form action="" method="POST">
+
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" value="" placeholder="Item Title" required="required" autofocus="autofocus" />
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" placeholder="Item Description" required="required" rows="10"></textarea>
+
+        <label for="picture">Picture: </label>
+        <input type="file" id="picture" name="picture" value="" />
+
+        <label for="category">Category: </label>
+        <select id="category" name="category">
+            <option value="hello">I just want to say hello =]</option>
+            <option value="quote">I'd like a quote</option>
+            <option value="general">General</option>
+        </select>
+
+        <input type="submit" value="Send away!" id="submit" />
+
+    </form>
+
+</div>
+
+{% endblock %}
