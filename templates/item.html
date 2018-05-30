@@ -1,6 +1,4 @@
-{% extends "main.html" %} {% block content %}
-
-{% include 'categories.html' %}
+{% extends "main.html" %} {% block content %} {% include 'categories.html' %}
 
 <div id="items" class="shadow">
     {% if item %}
@@ -8,7 +6,8 @@
     <h4 class="item-category">({{ item.category.name }})</h4>
     <br clear="all" />
     <h3 class="item-description">{{ item.description }}</h3>
-    {% else %}
+    {% if item.picture_path %}
+    <img src="/static/img/items/{{item.picture_path}}" /> {% endif %} {% else %}
     <h3 class="item-description">No items in this category with this name.</h3>
     {% endif %}
 </div>

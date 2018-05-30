@@ -13,8 +13,15 @@ import string
 import json
 import httplib2
 import requests
+import os
 
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
+
+from werkzeug.utils import secure_filename
+
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/img/items')
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
@@ -22,6 +29,7 @@ APPLICATION_NAME = "Catalog Item Application"
 
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///itemcatalog.db'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
@@ -29,6 +37,8 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
 db = SQLAlchemy(app)
 
 #
+
+
 @app.teardown_request
 def teardown_request(exception):
     if exception:
@@ -36,6 +46,11 @@ def teardown_request(exception):
     else:
         db.session.commit()
     db.session.remove()
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 # Create anti-forgery state token
@@ -248,16 +263,25 @@ def newItem():
         return render_template('forbidden.html')
     if request.method == 'POST':
         cat = Category.query.first()
+        picture = request.files['picture']
+        picture_path = ''
+
+        if picture and allowed_file(picture.filename):
+            picture_path = secure_filename(picture.filename)
+            picture.save(os.path.join(app.config['UPLOAD_FOLDER'], picture_path))
+
         newItem = Item(
-            title = request.form['title'],
-            description = request.form['description'],
-            cat_id = cat.id
+            title=request.form['title'],
+            description=request.form['description'],
+            cat_id=cat.id,
+            picture_path=picture_path
         )
+
         db.session.add(newItem)
         return redirect(url_for('main'))
-        print "oi"
     else:
-        return render_template('new_item.html')
+        cats = Category.query.all()
+        return render_template('new_item.html', categories=cats)
 
 
 # JSON APIs to view Catalog Information
