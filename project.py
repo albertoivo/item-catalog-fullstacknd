@@ -36,9 +36,7 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
 
 db = SQLAlchemy(app)
 
-#
-
-
+# Interceptor
 @app.teardown_request
 def teardown_request(exception):
     if exception:
@@ -251,6 +249,12 @@ def newCategory():
     if 'username' not in login_session:
         return render_template('forbidden.html')
     if request.method == 'POST':
+
+        newCategory = Category(
+            name=request.form['name']
+        )
+
+        db.session.add(newCategory)
         return redirect(url_for('main'))
     else:
         return render_template('new_category.html')

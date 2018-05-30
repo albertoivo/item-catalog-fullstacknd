@@ -8,7 +8,7 @@
     <a class="hide-mobile hover-red right" href="{{url_for('showLogin')}}">Login</a> {% else %}
     <a id="logout" class="hide-mobile hover-red right" href='/logout'>(Logout)</a>
     <span id="welcome" class="hide-mobile right">Welcome, {{ login_session['username'] }}</span>
-    <a href="#" class="hide-mobile hover-green">Add Category</a>
+    <a href="/category/new" class="hide-mobile hover-green">Add Category</a>
     <a href="/item/new" class="hide-mobile hover-green">Add Item</a> {% endif %}
   </div>
 
@@ -17,7 +17,7 @@
     {% if 'username' not in login_session %}
     <a href="{{url_for('showLogin')}}" class="bar-item button hover-red">Login</a> {% else %}
     <span class="bar-item">Welcome, {{ login_session['username'] }}</span>
-    <a href="#" class="bar-item button hover-green">Add Category</a>
+    <a href="/category/new" class="bar-item button hover-green">Add Category</a>
     <a href="/item/new" class="bar-item button hover-green">Add Item</a>
     <a class="bar-item button hover-red" href='/logout'>Logout</a> {% endif %}
   </div>
