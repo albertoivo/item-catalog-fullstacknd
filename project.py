@@ -245,10 +245,16 @@ def newItem():
 @app.route('/item/<string:item_id>/delete', methods=['GET', 'POST'])
 def deleteItem(item_id):
     item = Item.query.filter_by(id=item_id).first()
+
     cat_name = item.category.name
+    item_title = item.title
+
     current_db_sessions = db.object_session(item)
     current_db_sessions.delete(item)
     current_db_sessions.commit()
+
+    flash('%s Successfully Deleted' % item_title)
+
     return redirect(url_for('getItemsByCategory', category_name=cat_name))
 
 
