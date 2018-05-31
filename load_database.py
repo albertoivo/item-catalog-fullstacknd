@@ -5,6 +5,7 @@ from database_setup import Category, Item, db
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///itemcatalog.db'
+app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
 
 
 #   category 1   #

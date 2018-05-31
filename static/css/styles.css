@@ -52,7 +52,7 @@ a {
   color: var(--main-ftcolor);
 }
 
-.bar>a {
+.bar > a {
   padding: 12px 24px;
   float: left;
 }
@@ -92,7 +92,7 @@ a {
 
 .hover-green:hover {
   color: #fff !important;
-  background-color: #47A147 !important;
+  background-color: #47a147 !important;
 }
 
 #categories {
@@ -117,6 +117,11 @@ a {
   min-width: 300px;
   margin: 10px;
   background-color: #ffeead;
+}
+
+#items img {
+  width: 100%;
+  max-width: 500px;
 }
 
 .shadow {

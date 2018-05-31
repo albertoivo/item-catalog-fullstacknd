@@ -1,1 +1,55 @@
-<h1>new Item</h1>
+{% extends "main.html" %} {% block content %}
+
+<div id="items">
+
+    <div class="form">
+        <form action="#" enctype=multipart/form-data method="POST">
+            <div class="row">
+                <div class="col-25">
+                    <label for="title">Title</label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="title" name="title" placeholder="Item name">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-25">
+                    <label for="description">Description</label>
+                </div>
+                <div class="col-75">
+                    <textarea id="description" name="description" placeholder="Description" style="height:200px"></textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-25">
+                    <label for="picture">Picture</label>
+                </div>
+                <div class="col-75">
+                    <input type="file" id="picture" name="picture" placeholder="Item name">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-25">
+                    <label for="category">Category</label>
+                </div>
+                <div class="col-75">
+                    <select id="category" name="category">
+                        {% for cat in categories %}
+                        <option value="{{ cat.id }}">{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

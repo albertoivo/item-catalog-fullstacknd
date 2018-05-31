@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, render_template, request
 from flask import flash, make_response, redirect, url_for
 from flask import session as login_session
-
+from sqlalchemy import update
 from flask_sqlalchemy import SQLAlchemy
 
 from database_setup import Category, Item, User, db
@@ -13,8 +13,15 @@ import string
 import json
 import httplib2
 import requests
+import os
 
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
+
+from werkzeug.utils import secure_filename
+
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/img/items')
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
@@ -22,9 +29,19 @@ APPLICATION_NAME = "Catalog Item Application"
 
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///itemcatalog.db'
+app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
+
 db = SQLAlchemy(app)
+
+
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 # Create anti-forgery state token
@@ -225,9 +242,35 @@ def newCategory():
     if 'username' not in login_session:
         return render_template('forbidden.html')
     if request.method == 'POST':
+
+        newCategory = Category(
+            name=request.form['name']
+        )
+
+        db.session.add(newCategory)
         return redirect(url_for('main'))
     else:
         return render_template('new_category.html')
+
+
+@app.route('/category/<string:category_id>/edit', methods=['GET','POST'])
+def editCategory(category_id):
+    if 'username' not in login_session:
+        return render_template('forbidden.html')
+
+    if request.method == 'POST':
+        if request.form['name']:
+            cat = Category.query.filter_by(id=category_id).first()
+            cat.name = request.form['name']
+            db.session.commit()
+    else:
+        cat = Category.query.filter_by(id=category_id).first()
+        if cat:
+            return render_template('new_category.html', category=cat)
+        else:
+            return redirect(url_for('main'))
+
+    return redirect(url_for('main'))
 
 
 # Add Item
@@ -236,9 +279,25 @@ def newItem():
     if 'username' not in login_session:
         return render_template('forbidden.html')
     if request.method == 'POST':
+        picture = request.files['picture']
+        picture_path = ''
+
+        if picture and allowed_file(picture.filename):
+            picture_path = secure_filename(picture.filename)
+            picture.save(os.path.join(app.config['UPLOAD_FOLDER'], picture_path))
+
+        newItem = Item(
+            title=request.form['title'],
+            description=request.form['description'],
+            cat_id=request.form['category'],
+            picture_path=picture_path
+        )
+
+        db.session.add(newItem)
         return redirect(url_for('main'))
     else:
-        return render_template('new_item.html')
+        cats = Category.query.all()
+        return render_template('new_item.html', categories=cats)
 
 
 # Delete Item

@@ -1,1 +1,28 @@
-<h1>new category</h1>
+<h1>new category</h1>{% extends "main.html" %} {% block content %}
+
+<div id="items">
+
+    <div class="form">
+        <form action="#" enctype=multipart/form-data method="POST">
+            <div class="row">
+                <div class="col-25">
+                    <label for="name">Name</label>
+                </div>
+                <div class="col-75">
+                    {% if category %}
+                    <input type="text" id="name" name="name" value="{{category.name}}">
+                    {% else %}
+                    <input type="text" id="name" name="name" placeholder="Category name">
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row">
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}
