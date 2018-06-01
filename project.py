@@ -21,7 +21,7 @@ from werkzeug.utils import secure_filename
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/img/items')
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
@@ -35,8 +35,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///itemcatalog.db'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
 
 db = SQLAlchemy(app)
-
-
 
 
 def allowed_file(filename):
@@ -242,18 +240,17 @@ def newCategory():
     if 'username' not in login_session:
         return render_template('forbidden.html')
     if request.method == 'POST':
-
         newCategory = Category(
             name=request.form['name']
         )
-
         db.session.add(newCategory)
+        db.session.commit()
         return redirect(url_for('main'))
     else:
         return render_template('new_category.html')
 
 
-@app.route('/category/<string:category_id>/edit', methods=['GET','POST'])
+@app.route('/category/<string:category_id>/edit', methods=['GET', 'POST'])
 def editCategory(category_id):
     if 'username' not in login_session:
         return render_template('forbidden.html')
@@ -273,6 +270,20 @@ def editCategory(category_id):
     return redirect(url_for('main'))
 
 
+# Delete Category
+@app.route('/category/<string:cat_id>/delete', methods=['GET', 'POST'])
+def deleteCategory(cat_id):
+    cat = Category.query.filter_by(id=cat_id).first()
+
+    current_db_sessions = db.object_session(cat)
+    current_db_sessions.delete(cat)
+    current_db_sessions.commit()
+
+    flash('%s Successfully Deleted' % cat.name)
+
+    return redirect(url_for('main'))
+
+
 # Add Item
 @app.route('/item/new', methods=['GET', 'POST'])
 def newItem():
@@ -284,7 +295,8 @@ def newItem():
 
         if picture and allowed_file(picture.filename):
             picture_path = secure_filename(picture.filename)
-            picture.save(os.path.join(app.config['UPLOAD_FOLDER'], picture_path))
+            picture.save(os.path.join(
+                app.config['UPLOAD_FOLDER'], picture_path))
 
         newItem = Item(
             title=request.form['title'],

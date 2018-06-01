@@ -45,7 +45,7 @@ class Item(db.Model):
     created = db.Column(db.DateTime, nullable=False,
                         default=datetime.utcnow, onupdate=datetime.utcnow)
     cat_id = db.Column(db.Integer, db.ForeignKey('category.id'))
-    category = db.relationship(Category)
+    category = db.relationship(Category, backref=db.backref("Item", cascade="all,delete"))
 
     @property
     def serialize(self):
@@ -53,7 +53,6 @@ class Item(db.Model):
             'id': self.id,
             'title': self.title,
             'description': self.description,
-            'picture_path': self.picture_path,
             'cat_id': self.cat_id
         }
 
