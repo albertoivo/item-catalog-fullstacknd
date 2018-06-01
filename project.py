@@ -21,7 +21,6 @@ from werkzeug.utils import secure_filename
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/img/items')
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
@@ -37,7 +36,9 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
 db = SQLAlchemy(app)
 
 
+# Check if the picture is have an allowed extension
 def allowed_file(filename):
+    ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -251,12 +252,14 @@ def newCategory():
         return render_template('new_category.html', login_session=login_session)
 
 
+# Edit Category
 @app.route('/category/<string:category_id>/edit', methods=['GET', 'POST'])
 def editCategory(category_id):
     if 'username' not in login_session:
         return render_template('forbidden.html')
 
-    categoryToBeEdited = Category.query.filter_by(id=category_id).first_or_404()
+    categoryToBeEdited = Category.query.filter_by(
+        id=category_id).first_or_404()
     if request.method == 'POST':
         if request.form['name']:
             categoryToBeEdited.name = request.form['name']
@@ -269,7 +272,7 @@ def editCategory(category_id):
 
 
 # Delete Category
-@app.route('/category/<string:cat_id>/delete', methods=['GET', 'POST'])
+@app.route('/category/<string:cat_id>/delete')
 def deleteCategory(cat_id):
     cat = Category.query.filter_by(id=cat_id).first_or_404()
 
@@ -329,6 +332,7 @@ def deleteItem(item_id):
     return redirect(url_for('getItemsByCategory', category_name=cat_name))
 
 
+# Edit Item
 @app.route('/item/<string:item_id>/edit', methods=['GET', 'POST'])
 def editItem(item_id):
     if 'username' not in login_session:
@@ -361,10 +365,13 @@ def catalogJSON():
     return jsonify(catalog)
 
 
+# Error Handler
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('page_not_found.html', error=error), 404
 
+
+# Main
 if __name__ == '__main__':
     app.secret_key = '_ROZOjB0Ph1aBQrSS_n1gD58'
     app.debug = True

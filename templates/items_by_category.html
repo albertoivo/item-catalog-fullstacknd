@@ -4,7 +4,8 @@
   {% for item in items %}
   <p>
     <a href="{{url_for('getItem', category_name=item.category.name, item_title=item.title)}}" class="item-title">{{ item.title }}</a>
-    <a href="{{url_for('deleteItem', item_id=item.id)}}">Remove</a>
+    <a href="{{url_for('deleteItem', item_id=item.id)}}"><i class="fa fa-trash-o"></i></a>
+    <a href="{{url_for('editItem', item_id=item.id)}}"><i class="fa fa-pencil"></i></a>
   </p>
   {% endfor %} {% else %}
   <h3>There are no items for this category.</h3>

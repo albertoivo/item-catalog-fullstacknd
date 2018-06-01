@@ -72,6 +72,15 @@ a {
   float: right !important;
 }
 
+i {
+  color: black;
+  margin-left: 10px;
+}
+
+i:hover {
+  color: green;
+}
+
 .menu-mobile {
   background-color: var(--main-bgcolor);
   color: var(--main-ftcolor);

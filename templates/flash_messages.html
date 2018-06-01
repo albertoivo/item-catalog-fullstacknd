@@ -1,7 +1,7 @@
 {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
 <div class="container">
-<div id="flash">
-    <h4>{{message}}</h4>
-</div>
+    <div id="flash">
+        <h4 style="margin-left: 10px">{{message}}</h4>
+    </div>
 </div>
 {% endfor %} {% endif %} {% endwith %}
