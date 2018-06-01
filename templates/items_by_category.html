@@ -1,6 +1,6 @@
 <div id="items" class="shadow">
   {% if items %}
-  <h1 class="card-header">{{ items[0].category.name }}</h1>
+  <h1 class="card-header">{{ items[0].category.name }} ( {{ qty }} items)</h1>
   {% for item in items %}
   <p>
     <a href="{{url_for('getItem', category_name=item.category.name, item_title=item.title)}}" class="item-title">{{ item.title }}</a>

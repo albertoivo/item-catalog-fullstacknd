@@ -222,7 +222,7 @@ def getItemsByCategory(category_name):
     cats = Category.query.all()
     cat = Category.query.filter_by(name=category_name).first_or_404()
     items_by_category = Item.query.filter_by(category=cat).all()
-    return render_template('catalog.html', categories=cats,
+    return render_template('catalog.html', categories=cats, qty=len(items_by_category),
                            items=items_by_category, login_session=login_session)
 
 
