@@ -219,7 +219,7 @@ def main():
 @app.route('/catalog/<string:category_name>/items')
 def getItemsByCategory(category_name):
     cats = Category.query.all()
-    cat = Category.query.filter_by(name=category_name).first()
+    cat = Category.query.filter_by(name=category_name).first_or_404()
     items_by_category = Item.query.filter_by(category=cat).all()
     return render_template('catalog.html', categories=cats,
                            items=items_by_category, login_session=login_session)
@@ -229,8 +229,8 @@ def getItemsByCategory(category_name):
 @app.route('/catalog/<string:category_name>/<string:item_title>')
 def getItem(category_name, item_title):
     cats = Category.query.all()
-    cat = Category.query.filter_by(name=category_name).first()
-    item = Item.query.filter_by(title=item_title, category=cat).first()
+    cat = Category.query.filter_by(name=category_name).first_or_404()
+    item = Item.query.filter_by(title=item_title, category=cat).first_or_404()
     return render_template('item.html', categories=cats, item=item, login_session=login_session)
 
 
@@ -257,11 +257,11 @@ def editCategory(category_id):
 
     if request.method == 'POST':
         if request.form['name']:
-            cat = Category.query.filter_by(id=category_id).first()
+            cat = Category.query.filter_by(id=category_id).first_or_404()
             cat.name = request.form['name']
             db.session.commit()
     else:
-        cat = Category.query.filter_by(id=category_id).first()
+        cat = Category.query.filter_by(id=category_id).first_or_404()
         if cat:
             return render_template('new_category.html', category=cat, login_session=login_session)
         else:
@@ -273,7 +273,7 @@ def editCategory(category_id):
 # Delete Category
 @app.route('/category/<string:cat_id>/delete', methods=['GET', 'POST'])
 def deleteCategory(cat_id):
-    cat = Category.query.filter_by(id=cat_id).first()
+    cat = Category.query.filter_by(id=cat_id).first_or_404()
 
     current_db_sessions = db.object_session(cat)
     current_db_sessions.delete(cat)
@@ -340,6 +340,10 @@ def catalogJSON():
             item.serialize for item in items if item.cat_id == cat['id']]
     return jsonify(catalog)
 
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('page_not_found.html', error=error), 404
 
 if __name__ == '__main__':
     app.secret_key = '_ROZOjB0Ph1aBQrSS_n1gD58'
