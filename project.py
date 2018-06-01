@@ -245,6 +245,7 @@ def newCategory():
         )
         db.session.add(newCategory)
         db.session.commit()
+        flash('%s Successfully Created' % newCategory.name)
         return redirect(url_for('main'))
     else:
         return render_template('new_category.html', login_session=login_session)
@@ -255,17 +256,14 @@ def editCategory(category_id):
     if 'username' not in login_session:
         return render_template('forbidden.html')
 
+    categoryToBeEdited = Category.query.filter_by(id=category_id).first_or_404()
     if request.method == 'POST':
         if request.form['name']:
-            cat = Category.query.filter_by(id=category_id).first_or_404()
-            cat.name = request.form['name']
+            categoryToBeEdited.name = request.form['name']
             db.session.commit()
+            flash('%s Successfully Edited' % categoryToBeEdited.name)
     else:
-        cat = Category.query.filter_by(id=category_id).first_or_404()
-        if cat:
-            return render_template('new_category.html', category=cat, login_session=login_session)
-        else:
-            return redirect(url_for('main'))
+        return render_template('new_category.html', category=categoryToBeEdited, login_session=login_session)
 
     return redirect(url_for('main'))
 
@@ -306,7 +304,9 @@ def newItem():
         )
 
         db.session.add(newItem)
-        return redirect(url_for('main'))
+        db.session.commit()
+        flash('%s Successfully Created' % newItem.title)
+        return redirect(url_for('getItemsByCategory', category_name=newItem.category.name))
     else:
         cats = Category.query.all()
         return render_template('new_item.html', categories=cats, login_session=login_session)
@@ -327,6 +327,26 @@ def deleteItem(item_id):
     flash('%s Successfully Deleted' % item_title)
 
     return redirect(url_for('getItemsByCategory', category_name=cat_name))
+
+
+@app.route('/item/<string:item_id>/edit', methods=['GET', 'POST'])
+def editItem(item_id):
+    if 'username' not in login_session:
+        return render_template('forbidden.html')
+
+    itemToBeEdited = Item.query.filter_by(id=item_id).first_or_404()
+    if request.method == 'POST':
+        if request.form['title']:
+            itemToBeEdited.title = request.form['title']
+        if request.form['description']:
+            itemToBeEdited.description = request.form['description']
+        db.session.commit()
+        flash('%s Successfully Edited' % itemToBeEdited.title)
+    else:
+        cats = Category.query.all()
+        return render_template('new_item.html', item=itemToBeEdited, categories=cats, login_session=login_session)
+
+    return redirect(url_for('main'))
 
 
 # JSON APIs to view Catalog Information

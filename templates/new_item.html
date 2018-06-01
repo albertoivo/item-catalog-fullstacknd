@@ -9,7 +9,11 @@
                     <label for="title">Title</label>
                 </div>
                 <div class="col-75">
-                    <input type="text" id="title" name="title" placeholder="Item name">
+                    {% if item %}
+                    <input type="text" id="title" name="title" value="{{ item.title }}">
+                    {% else %}
+                    <input type="text" id="title" name="title" placeholder="Item title">
+                    {% endif %}
                 </div>
             </div>
 
@@ -18,7 +22,11 @@
                     <label for="description">Description</label>
                 </div>
                 <div class="col-75">
+                    {% if item %}
+                    <textarea id="description" name="description" style="height:200px">{{ item.description }}</textarea>
+                    {% else %}
                     <textarea id="description" name="description" placeholder="Description" style="height:200px"></textarea>
+                    {% endif %}
                 </div>
             </div>
 
@@ -27,7 +35,7 @@
                     <label for="picture">Picture</label>
                 </div>
                 <div class="col-75">
-                    <input type="file" id="picture" name="picture" placeholder="Item name">
+                    <input type="file" id="picture" name="picture" placeholder="Item title">
                 </div>
             </div>
 
