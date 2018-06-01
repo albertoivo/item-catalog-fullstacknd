@@ -1,5 +1,5 @@
 <div id="items" class="shadow">
-  {% include 'flash_messages.html' %} {% if items %}
+  {% if items %}
   <h1 class="card-header">{{ items[0].category.name }}</h1>
   {% for item in items %}
   <p>
