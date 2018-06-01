@@ -222,7 +222,7 @@ def getItemsByCategory(category_name):
     cat = Category.query.filter_by(name=category_name).first()
     items_by_category = Item.query.filter_by(category=cat).all()
     return render_template('catalog.html', categories=cats,
-                           items=items_by_category)
+                           items=items_by_category, login_session=login_session)
 
 
 # Get the selected item description
@@ -231,7 +231,7 @@ def getItem(category_name, item_title):
     cats = Category.query.all()
     cat = Category.query.filter_by(name=category_name).first()
     item = Item.query.filter_by(title=item_title, category=cat).first()
-    return render_template('item.html', categories=cats, item=item)
+    return render_template('item.html', categories=cats, item=item, login_session=login_session)
 
 
 # Add Category
@@ -247,7 +247,7 @@ def newCategory():
         db.session.commit()
         return redirect(url_for('main'))
     else:
-        return render_template('new_category.html')
+        return render_template('new_category.html', login_session=login_session)
 
 
 @app.route('/category/<string:category_id>/edit', methods=['GET', 'POST'])
@@ -263,7 +263,7 @@ def editCategory(category_id):
     else:
         cat = Category.query.filter_by(id=category_id).first()
         if cat:
-            return render_template('new_category.html', category=cat)
+            return render_template('new_category.html', category=cat, login_session=login_session)
         else:
             return redirect(url_for('main'))
 
@@ -309,7 +309,7 @@ def newItem():
         return redirect(url_for('main'))
     else:
         cats = Category.query.all()
-        return render_template('new_item.html', categories=cats)
+        return render_template('new_item.html', categories=cats, login_session=login_session)
 
 
 # Delete Item
