@@ -44,7 +44,11 @@
                     <label for="category">Category</label>
                 </div>
                 <div class="col-75">
+                    {% if item %}
+                    <select id="category" name="category" value="{{ item.cat_id }}">
+                    {% else %}
                     <select id="category" name="category">
+                    {% endif %}
                         {% for cat in categories %}
                         <option value="{{ cat.id }}">{{ cat.name }}</option>
                         {% endfor %}

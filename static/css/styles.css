@@ -176,6 +176,12 @@ a {
   margin: auto;
 }
 
+#notfound {
+  width: 100%;
+  display: block;
+  margin: auto;
+}
+
 #flash {
   position: absolute;
   background-color: #d4edda;

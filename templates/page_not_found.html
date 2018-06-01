@@ -1,1 +1,8 @@
+{% extends "main.html" %}
+
+{% block content %}
+
+<img id="notfound" src="{{ url_for( 'static', filename='img/404.jpeg' ) }} " alt="Page Not Found" />
 <h1>{{ error }}</h1>
+
+{% endblock %}

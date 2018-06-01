@@ -344,7 +344,14 @@ def editItem(item_id):
             itemToBeEdited.title = request.form['title']
         if request.form['description']:
             itemToBeEdited.description = request.form['description']
-        db.session.commit()
+        if request.form['picture']:
+            itemToBeEdited.picture = request.form['picture']
+        if request.form['category']:
+            itemToBeEdited.cat_id = request.form['category']
+
+        current_db_sessions = db.object_session(itemToBeEdited)
+        current_db_sessions.commit()
+
         flash('%s Successfully Edited' % itemToBeEdited.title)
     else:
         cats = Category.query.all()
@@ -368,7 +375,7 @@ def catalogJSON():
 # Error Handler
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('page_not_found.html', error=error), 404
+    return render_template('page_not_found.html', error=error, login_session=login_session), 404
 
 
 # Main
