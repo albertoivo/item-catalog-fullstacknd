@@ -21,9 +21,7 @@ This is a project for Udacity Course Nanodegree Full Stack Web Developer.
 
 ## Prerequisites
 
-1.  apt-get -qqy install python3 python3-pip
-2.  pip3 install --upgrade pip
-3.  pip3 install psycopg2
+
 
 ## Quick start
 
