@@ -331,10 +331,16 @@ def editItem(item_id):
     if request.method == 'POST':
         title = request.form['title']
         description = request.form['description']
-        picture = request.form['picture']
         cat_id = request.form['category']
+        picture = request.files['picture']
+        picture_path = ''
+        if picture and allowed_file(picture.filename):
+            picture_path = secure_filename(picture.filename)
+            picture.save(os.path.join(
+                app.config['UPLOAD_FOLDER'], picture_path))
+            print picture_path
 
-        crud.editItem(item_id, title, description, picture, cat_id)
+        crud.editItem(item_id, title, description, picture_path, cat_id)
 
         flash('Item Successfully Edited')
     else:
