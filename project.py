@@ -337,6 +337,9 @@ def editItem(item_id):
         picture = request.files['picture']
         picture_path = ''
         if picture and allowed_file(picture.filename):
+            if itemToBeEdited.picture_path:
+                os.remove(os.path.join(
+                    app.config['UPLOAD_FOLDER'], itemToBeEdited.picture_path))
             picture_path = secure_filename(picture.filename)
             picture.save(os.path.join(
                 app.config['UPLOAD_FOLDER'], picture_path))
