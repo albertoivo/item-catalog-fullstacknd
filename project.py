@@ -328,6 +328,8 @@ def editItem(item_id):
     if 'username' not in login_session:
         return render_template('forbidden.html')
 
+    itemToBeEdited = crud.itemById(item_id)
+
     if request.method == 'POST':
         title = request.form['title']
         description = request.form['description']
@@ -345,7 +347,7 @@ def editItem(item_id):
         flash('Item Successfully Edited')
     else:
         cats = crud.allCategories()
-        itemToBeEdited = crud.itemById(item_id)
+
         return render_template('new_item.html', item=itemToBeEdited, categories=cats, login_session=login_session)
 
     return redirect(url_for('main'))
