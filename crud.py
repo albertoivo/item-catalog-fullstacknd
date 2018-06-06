@@ -8,6 +8,11 @@ def allCategories():
     return Category.query.all()
 
 
+# find all items
+def allItems():
+    return Item.query.all()
+
+
 # find the latest items
 def latestItem():
     return Item.query.order_by(Item.created.desc()).limit(10)

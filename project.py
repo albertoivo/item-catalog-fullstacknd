@@ -355,7 +355,7 @@ def editItem(item_id):
 @app.route('/catalog.json')
 def catalogJSON():
     categories = crud.allCategories()
-    items = Item.query.all()
+    items = crud.allItems())
     catalog = {"Category": [cat.serialize for cat in categories]}
     for cat in catalog["Category"]:
         cat["item"] = [
