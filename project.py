@@ -2,7 +2,6 @@ from flask import Flask, jsonify, render_template, request
 from flask import flash, make_response, redirect, url_for
 from flask import session as login_session
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import update
 
 from flask_wtf.csrf import CSRFProtect, CSRFError
 
@@ -329,23 +328,18 @@ def editItem(item_id):
     if 'username' not in login_session:
         return render_template('forbidden.html')
 
-    itemToBeEdited = Item.query.filter_by(id=item_id).first_or_404()
     if request.method == 'POST':
-        if request.form['title']:
-            itemToBeEdited.title = request.form['title']
-        if request.form['description']:
-            itemToBeEdited.description = request.form['description']
-        if request.form['picture']:
-            itemToBeEdited.picture = request.form['picture']
-        if request.form['category']:
-            itemToBeEdited.cat_id = request.form['category']
+        title = request.form['title']
+        description = request.form['description']
+        picture = request.form['picture']
+        cat_id = request.form['category']
 
-        current_db_sessions = db.object_session(itemToBeEdited)
-        current_db_sessions.commit()
+        crud.editItem(item_id, title, description, picture, cat_id)
 
-        flash('%s Successfully Edited' % itemToBeEdited.title)
+        flash('Item Successfully Edited')
     else:
         cats = crud.allCategories()
+        itemToBeEdited = crud.itemById(item_id)
         return render_template('new_item.html', item=itemToBeEdited, categories=cats, login_session=login_session)
 
     return redirect(url_for('main'))
@@ -355,7 +349,7 @@ def editItem(item_id):
 @app.route('/catalog.json')
 def catalogJSON():
     categories = crud.allCategories()
-    items = crud.allItems())
+    items = crud.allItems()
     catalog = {"Category": [cat.serialize for cat in categories]}
     for cat in catalog["Category"]:
         cat["item"] = [

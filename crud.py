@@ -72,3 +72,14 @@ def deleteItem(item_id):
     item = itemById(item_id)
     db.session.delete(item)
     db.session.commit()
+
+
+# edit item
+def editItem(item_id, title, description, picture, cat_id):
+    item = itemById(item_id)
+    item.title = title
+    item.description = description
+    item.picture = picture
+    item.cat_id = cat_id
+
+    db.session.commit()
