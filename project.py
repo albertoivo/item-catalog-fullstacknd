@@ -10,6 +10,7 @@ from database_setup import Category, Item, User, db
 
 from user_helper import createUser, getUserInfo, getUserID, delLoginSession
 
+import crud
 import random
 import string
 import json
@@ -218,8 +219,8 @@ def gdisconnect():
 # Main screen
 @app.route('/')
 def main():
-    cats = Category.query.all()
-    latest_items = Item.query.order_by(Item.created.desc()).limit(10).all()
+    cats = crud.allCategories()
+    latest_items = crud.latestItem()
     return render_template('catalog.html', categories=cats, items=latest_items,
                            main_screen=True, login_session=login_session)
 
@@ -227,9 +228,8 @@ def main():
 # Get all Items by a selected Category
 @app.route('/catalog/<string:category_name>/items')
 def getItemsByCategory(category_name):
-    cats = Category.query.all()
-    cat = Category.query.filter_by(name=category_name).first_or_404()
-    items_by_category = Item.query.filter_by(category=cat).all()
+    cats = crud.allCategories()
+    items_by_category = crud.itemsByCategory(category_name)
     return render_template('catalog.html', categories=cats, qty=len(items_by_category),
                            items=items_by_category, login_session=login_session)
 
@@ -237,9 +237,8 @@ def getItemsByCategory(category_name):
 # Get the selected item description
 @app.route('/catalog/<string:category_name>/<string:item_title>')
 def getItem(category_name, item_title):
-    cats = Category.query.all()
-    cat = Category.query.filter_by(name=category_name).first_or_404()
-    item = Item.query.filter_by(title=item_title, category=cat).first_or_404()
+    cats = crud.allCategories()
+    item = crud.item(category_name, item_title)
     return render_template('item.html', categories=cats, item=item, login_session=login_session)
 
 
@@ -252,8 +251,7 @@ def newCategory():
         newCategory = Category(
             name=request.form['name']
         )
-        db.session.add(newCategory)
-        db.session.commit()
+        crud.newCategory(newCategory)
         flash('%s Successfully Created' % newCategory.name)
         return redirect(url_for('main'))
     else:
@@ -263,18 +261,17 @@ def newCategory():
 # Edit Category
 @app.route('/category/<string:category_id>/edit', methods=['GET', 'POST'])
 def editCategory(category_id):
+    cat = crud.category(category_id)
     if 'username' not in login_session:
         return render_template('forbidden.html')
 
-    categoryToBeEdited = Category.query.filter_by(
-        id=category_id).first_or_404()
     if request.method == 'POST':
-        if request.form['name']:
-            categoryToBeEdited.name = request.form['name']
-            db.session.commit()
-            flash('%s Successfully Edited' % categoryToBeEdited.name)
+        name = request.form['name']
+        if name:
+            crud.editCategory(category_id, name)
+            flash('\"%s\" Successfully Edited' % name)
     else:
-        return render_template('new_category.html', category=categoryToBeEdited, login_session=login_session)
+        return render_template('new_category.html', category=cat, login_session=login_session)
 
     return redirect(url_for('main'))
 
@@ -282,14 +279,8 @@ def editCategory(category_id):
 # Delete Category
 @app.route('/category/<string:cat_id>/delete')
 def deleteCategory(cat_id):
-    cat = Category.query.filter_by(id=cat_id).first_or_404()
-
-    current_db_sessions = db.object_session(cat)
-    current_db_sessions.delete(cat)
-    current_db_sessions.commit()
-
+    crud.deleteCategory(cat_id)
     flash('%s Successfully Deleted' % cat.name)
-
     return redirect(url_for('main'))
 
 
@@ -299,13 +290,14 @@ def newItem():
     if 'username' not in login_session:
         return render_template('forbidden.html')
     if request.method == 'POST':
-        picture = request.files['picture']
         picture_path = ''
+        if request.files['picture']:
+            picture = request.files['picture']
 
-        if picture and allowed_file(picture.filename):
-            picture_path = secure_filename(picture.filename)
-            picture.save(os.path.join(
-                app.config['UPLOAD_FOLDER'], picture_path))
+            if picture and allowed_file(picture.filename):
+                picture_path = secure_filename(picture.filename)
+                picture.save(os.path.join(
+                    app.config['UPLOAD_FOLDER'], picture_path))
 
         newItem = Item(
             title=request.form['title'],
@@ -314,29 +306,20 @@ def newItem():
             picture_path=picture_path
         )
 
-        db.session.add(newItem)
-        db.session.commit()
-        flash('%s Successfully Created' % newItem.title)
+        crud.newItem(newItem)
+        flash('\"%s\" Successfully Created' % newItem.title)
         return redirect(url_for('getItemsByCategory', category_name=newItem.category.name))
     else:
-        cats = Category.query.all()
+        cats = crud.allCategories()
         return render_template('new_item.html', categories=cats, login_session=login_session)
 
 
 # Delete Item
 @app.route('/item/<string:item_id>/delete', methods=['GET', 'POST'])
 def deleteItem(item_id):
-    item = Item.query.filter_by(id=item_id).first()
-
-    cat_name = item.category.name
-    item_title = item.title
-
-    current_db_sessions = db.object_session(item)
-    current_db_sessions.delete(item)
-    current_db_sessions.commit()
-
-    flash('%s Successfully Deleted' % item_title)
-
+    cat_name = crud.itemById(item_id).category.name
+    crud.deleteItem(item_id)
+    flash('Item Successfully Deleted')
     return redirect(url_for('getItemsByCategory', category_name=cat_name))
 
 
@@ -362,7 +345,7 @@ def editItem(item_id):
 
         flash('%s Successfully Edited' % itemToBeEdited.title)
     else:
-        cats = Category.query.all()
+        cats = crud.allCategories()
         return render_template('new_item.html', item=itemToBeEdited, categories=cats, login_session=login_session)
 
     return redirect(url_for('main'))
@@ -371,7 +354,7 @@ def editItem(item_id):
 # JSON APIs to view Catalog Information
 @app.route('/catalog.json')
 def catalogJSON():
-    categories = Category.query.all()
+    categories = crud.allCategories()
     items = Item.query.all()
     catalog = {"Category": [cat.serialize for cat in categories]}
     for cat in catalog["Category"]:

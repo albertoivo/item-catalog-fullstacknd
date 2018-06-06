@@ -1,0 +1,69 @@
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import update
+from database_setup import Category, Item, User, db
+
+
+# find all categories
+def allCategories():
+    return Category.query.all()
+
+
+# find the latest items
+def latestItem():
+    return Item.query.order_by(Item.created.desc()).limit(10)
+
+
+# find Items By Category
+def itemsByCategory(category_name):
+    cat = Category.query.filter_by(name=category_name).first_or_404()
+    return Item.query.filter_by(category=cat).all()
+
+
+# get the whole item by category and title
+def item(category_name, item_title):
+    cat = Category.query.filter_by(name=category_name).first_or_404()
+    return Item.query.filter_by(title=item_title, category=cat).first_or_404()
+
+
+def itemById(item_id):
+    return Item.query.filter_by(id=item_id).first_or_404()
+
+
+# create a new category
+def newCategory(newCategory):
+    db.session.add(newCategory)
+    db.session.commit()
+
+
+# find a category by id
+def category(category_id):
+    return Category.query.filter_by(id=category_id).first_or_404();
+
+
+# edit a category
+def editCategory(category_id, name):
+    categoryToBeEdited = category(category_id)
+    categoryToBeEdited.name = name
+    db.session.commit()
+
+
+# delete a category
+def deleteCategory(cat_id):
+    cat = Category.query.filter_by(id=cat_id).first_or_404()
+
+    current_db_sessions = db.object_session(cat)
+    current_db_sessions.delete(cat)
+    current_db_sessions.commit()
+
+
+# create a new Item
+def newItem(newItem):
+    db.session.add(newItem)
+    db.session.commit()
+
+
+# delete the item
+def deleteItem(item_id):
+    item = itemById(item_id)
+    db.session.delete(item)
+    db.session.commit()
