@@ -1,4 +1,4 @@
-from database_setup import User, db
+from model import User, db
 
 
 def createUser(login_session):

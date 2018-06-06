@@ -6,7 +6,7 @@ from sqlalchemy import update
 
 from flask_wtf.csrf import CSRFProtect, CSRFError
 
-from database_setup import Category, Item, User, db
+from model import Category, Item, User, db
 
 from user_helper import createUser, getUserInfo, getUserID, delLoginSession
 

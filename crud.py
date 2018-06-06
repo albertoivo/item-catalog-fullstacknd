@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import update
-from database_setup import Category, Item, User, db
+from model import Category, Item, User, db
 
 
 # find all categories
