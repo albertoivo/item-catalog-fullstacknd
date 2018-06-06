@@ -1,8 +1,10 @@
 from flask import Flask, jsonify, render_template, request
 from flask import flash, make_response, redirect, url_for
 from flask import session as login_session
-from sqlalchemy import update
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import update
+
+from flask_wtf.csrf import CSRFProtect, CSRFError
 
 from database_setup import Category, Item, User, db
 
@@ -19,6 +21,9 @@ from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 
 from werkzeug.utils import secure_filename
 
+# Protect application from third party attack
+csrf = CSRFProtect()
+
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/img/items')
 
@@ -32,6 +37,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///itemcatalog.db'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
+
+csrf.init_app(app)
 
 db = SQLAlchemy(app)
 
@@ -55,6 +62,7 @@ def showLogin():
 
 
 # Login - Google
+@csrf.exempt
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     # Validate state token
@@ -378,8 +386,15 @@ def page_not_found(error):
     return render_template('page_not_found.html', error=error, login_session=login_session), 404
 
 
+# Handle a CSRF error that may occur
+@app.errorhandler(CSRFError)
+def handle_csrf_error(e):
+    return render_template('csrf_error.html', reason=e.description), 400
+
+
 # Main
 if __name__ == '__main__':
     app.secret_key = '_ROZOjB0Ph1aBQrSS_n1gD58'
+    app.wtf_csrf_secret_key = 'aj@2lL!OA0NU'
     app.debug = True
     app.run(host='0.0.0.0', port=8000)
