@@ -72,12 +72,12 @@ a {
   float: right !important;
 }
 
-#items i {
+#actions i {
   color: black;
   margin-left: 10px;
 }
 
-#items i:hover {
+#actions i:hover {
   color: green;
 }
 
@@ -150,12 +150,14 @@ a {
   margin-left: 20px;
   margin-bottom: 10px;
   color: var(--main-bgcolor);
+  float: left;
 }
 
 .item-title {
   font-weight: bolder;
   margin-left: 20px;
   color: var(--main-bgcolor);
+  float: left;
 }
 
 .item-category {
