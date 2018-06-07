@@ -16,6 +16,7 @@ import json
 import httplib2
 import requests
 import os
+import datetime
 
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 
@@ -170,6 +171,10 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
+    userID = getUserID(login_session['email'])
+    if not userID:
+        createUser(login_session)
+
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
@@ -262,7 +267,6 @@ def newCategory():
 # Edit Category
 @app.route('/category/<string:category_id>/edit', methods=['GET', 'POST'])
 def editCategory(category_id):
-    cat = crud.category(category_id)
     if 'username' not in login_session:
         app.logger.error(
             'Not authenticated user trying to access a protected service.')
@@ -274,6 +278,7 @@ def editCategory(category_id):
             crud.editCategory(category_id, name)
             flash('\"%s\" Successfully Edited' % name)
     else:
+        cat = crud.category(category_id)
         return render_template('new_category.html', category=cat, login_session=login_session)
 
     return redirect(url_for('main'))
@@ -282,9 +287,14 @@ def editCategory(category_id):
 # Delete Category
 @app.route('/category/<string:cat_id>/delete')
 def deleteCategory(cat_id):
+    if 'username' not in login_session:
+        app.logger.error(
+            'Not authenticated user trying to access a protected service.')
+        return render_template('forbidden.html')
+
     crud.deleteCategory(cat_id)
 
-    app.logger.info('category deleted.')
+    app.logger.info('category %s deleted.' % cat_id)
     flash('Category Successfully Deleted')
 
     return redirect(url_for('main'))
@@ -297,6 +307,7 @@ def newItem():
         app.logger.error(
             'Not authenticated user trying to access a protected service.')
         return render_template('forbidden.html')
+
     if request.method == 'POST':
         picture_path = ''
         if request.files['picture']:
@@ -315,7 +326,10 @@ def newItem():
         )
 
         crud.newItem(newItem)
+
+        app.logger.info('Item %s created.' % newItem.title)
         flash('\"%s\" Successfully Created' % newItem.title)
+
         return redirect(url_for('getItemsByCategory', category_name=newItem.category.name))
     else:
         cats = crud.allCategories()
@@ -325,9 +339,17 @@ def newItem():
 # Delete Item
 @app.route('/item/<string:item_id>/delete', methods=['GET', 'POST'])
 def deleteItem(item_id):
+    if 'username' not in login_session:
+        app.logger.error(
+            'Not authenticated user trying to access a protected service.')
+        return render_template('forbidden.html')
+
     cat_name = crud.itemById(item_id).category.name
     crud.deleteItem(item_id)
+
+    app.logger.info('Item %s deleted' % item_id)
     flash('Item Successfully Deleted')
+
     return redirect(url_for('getItemsByCategory', category_name=cat_name))
 
 
@@ -354,7 +376,6 @@ def editItem(item_id):
             picture_path = secure_filename(picture.filename)
             picture.save(os.path.join(
                 app.config['UPLOAD_FOLDER'], picture_path))
-            print picture_path
 
         crud.editItem(item_id, title, description, picture_path, cat_id)
 
@@ -396,4 +417,5 @@ if __name__ == '__main__':
     app.secret_key = '_ROZOjB0Ph1aBQrSS_n1gD58'
     app.wtf_csrf_secret_key = 'aj@2lL!OA0NU'
     app.debug = True
+    app.logger.info('App incializing at %s' % datetime.datetime.now())
     app.run(host='0.0.0.0', port=8000)
