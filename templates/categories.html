@@ -5,6 +5,7 @@
     {% for cat in categories %}
     <p>
         <a href="{{url_for('getItemsByCategory', category_name=cat.name)}}" class="category-name">{{ cat.name }}</a>
+        {% if 'username' in login_session %}
         <div id="actions">
             <a href="{{url_for('deleteCategory', cat_id=cat.id)}}" onclick="return confirm('Removing this category \'{{ cat.name }}\' will remove all its items. Proceed?')">
                 <i class="fa fa-trash-o"></i>
@@ -13,6 +14,9 @@
                 <i class="fa fa-pencil"></i>
             </a>
         </div>
+        {% else %}
+        <br clear="all">
+        {% endif %}
     </p>
     {% endfor %}
 </div>
