@@ -245,6 +245,8 @@ def getItem(category_name, item_title):
 @app.route('/category/new', methods=['GET', 'POST'])
 def newCategory():
     if 'username' not in login_session:
+        app.logger.error(
+            'Not authenticated user trying to access a protected service.')
         return render_template('forbidden.html')
     if request.method == 'POST':
         newCategory = Category(
@@ -262,6 +264,8 @@ def newCategory():
 def editCategory(category_id):
     cat = crud.category(category_id)
     if 'username' not in login_session:
+        app.logger.error(
+            'Not authenticated user trying to access a protected service.')
         return render_template('forbidden.html')
 
     if request.method == 'POST':
@@ -279,7 +283,10 @@ def editCategory(category_id):
 @app.route('/category/<string:cat_id>/delete')
 def deleteCategory(cat_id):
     crud.deleteCategory(cat_id)
-    flash('%s Successfully Deleted' % cat.name)
+
+    app.logger.info('category deleted.')
+    flash('Category Successfully Deleted')
+
     return redirect(url_for('main'))
 
 
@@ -287,6 +294,8 @@ def deleteCategory(cat_id):
 @app.route('/item/new', methods=['GET', 'POST'])
 def newItem():
     if 'username' not in login_session:
+        app.logger.error(
+            'Not authenticated user trying to access a protected service.')
         return render_template('forbidden.html')
     if request.method == 'POST':
         picture_path = ''
@@ -326,6 +335,8 @@ def deleteItem(item_id):
 @app.route('/item/<string:item_id>/edit', methods=['GET', 'POST'])
 def editItem(item_id):
     if 'username' not in login_session:
+        app.logger.error(
+            'Not authenticated user trying to access a protected service.')
         return render_template('forbidden.html')
 
     itemToBeEdited = crud.itemById(item_id)
