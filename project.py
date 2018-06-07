@@ -351,7 +351,7 @@ def deleteItem(item_id):
     if user.email == item.user.name:
         crud.deleteItem(item_id)
     else:
-        error = 'You can delete only items the you created!'
+        error = 'You can delete only items that you created!'
         return render_template('forbidden.html', error=error)
 
     app.logger.info('Item %s deleted' % item_id)
@@ -364,9 +364,9 @@ def deleteItem(item_id):
 @app.route('/item/<string:item_id>/edit', methods=['GET', 'POST'])
 def editItem(item_id):
     if 'username' not in login_session:
-        app.logger.error(
-            'Not authenticated user trying to access a protected service.')
-        return render_template('forbidden.html')
+        error = 'Not authenticated user trying to access a protected service.'
+        app.logger.error(error)
+        return render_template('forbidden.html', error=error)
 
     itemToBeEdited = crud.itemById(item_id)
 
