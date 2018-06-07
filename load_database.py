@@ -1,11 +1,18 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from model import Category, Item, db
+from model import User, Category, Item, db
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///itemcatalog.db'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
+
+# user 1 #
+
+user1 = User(name="Alberto Ivo", email="albertoivo@gmail.com",
+            picture="https://lh5.googleusercontent.com/-smnqdptNz7c/AAAAAAAAAAI/AAAAAAAAAAA/IXBlsOnx2yY/photo.jpg")
+db.session.add(user1)
+db.session.commit()
 
 
 #   category 1   #
@@ -14,15 +21,15 @@ cat = Category(name='Car')
 db.session.add(cat)
 db.session.commit()
 
-item1 = Item(title='EcoSport', description='SUV', category=cat)
+item1 = Item(title='EcoSport', description='SUV', category=cat, picture_path="ecosport.jpeg", user=user1)
 db.session.add(item1)
 db.session.commit()
 
-item2 = Item(title='Civic', description='Sedan', category=cat)
+item2 = Item(title='Civic', description='Sedan', category=cat, picture_path="civic.png", user=user1)
 db.session.add(item2)
 db.session.commit()
 
-item3 = Item(title='Focus', description='hatch', category=cat)
+item3 = Item(title='Focus', description='hatch', category=cat, picture_path="focus.jpeg", user=user1)
 db.session.add(item3)
 db.session.commit()
 
@@ -32,10 +39,10 @@ cat = Category(name='Movies')
 db.session.add(cat)
 db.session.commit()
 
-item1 = Item(title='InterStellar', description='Fiction', category=cat)
+item1 = Item(title='InterStellar', description='Fiction', category=cat, user=user1)
 db.session.add(item1)
 db.session.commit()
 
-item2 = Item(title='Saving Private Ryan', description='Drama', category=cat)
+item2 = Item(title='Saving Private Ryan', description='Drama', category=cat, user=user1)
 db.session.add(item2)
 db.session.commit()
