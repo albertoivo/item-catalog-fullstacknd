@@ -1,6 +1,10 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import update
 from model import Category, Item, User, db
+import os
+
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/img/items')
 
 
 # find all categories
@@ -71,8 +75,7 @@ def newItem(newItem):
 def deleteItem(item_id):
     item = itemById(item_id)
     if item.picture_path:
-        os.remove(os.path.join(
-            app.config['UPLOAD_FOLDER'], item.picture_path))
+        os.remove(os.path.join(UPLOAD_FOLDER, item.picture_path))
     db.session.delete(item)
     db.session.commit()
 

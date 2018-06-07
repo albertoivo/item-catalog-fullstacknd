@@ -340,12 +340,19 @@ def newItem():
 @app.route('/item/<string:item_id>/delete', methods=['GET', 'POST'])
 def deleteItem(item_id):
     if 'username' not in login_session:
-        app.logger.error(
-            'Not authenticated user trying to access a protected service.')
-        return render_template('forbidden.html')
+        error = 'Not authenticated user trying to access a protected service.'
+        app.logger.error(error)
+        return render_template('forbidden.html', error=error)
 
-    cat_name = crud.itemById(item_id).category.name
-    crud.deleteItem(item_id)
+    item = crud.itemById(item_id)
+    cat_name = item.category.name
+    user_id = getUserID(login_session['email'])
+    user = getUserInfo(user_id)
+    if user.email == item.user.name:
+        crud.deleteItem(item_id)
+    else:
+        error = 'You can delete only items the you created!'
+        return render_template('forbidden.html', error=error)
 
     app.logger.info('Item %s deleted' % item_id)
     flash('Item Successfully Deleted')
@@ -377,7 +384,11 @@ def editItem(item_id):
             picture.save(os.path.join(
                 app.config['UPLOAD_FOLDER'], picture_path))
 
-        crud.editItem(item_id, title, description, picture_path, cat_id)
+        if user.email == item.user.name:
+            crud.editItem(item_id, title, description, picture_path, cat_id)
+        else:
+            error = 'You can edit only items the you created!'
+            return render_template('forbidden.html', error=error)
 
         flash('Item Successfully Edited')
     else:
@@ -417,5 +428,6 @@ if __name__ == '__main__':
     app.secret_key = '_ROZOjB0Ph1aBQrSS_n1gD58'
     app.wtf_csrf_secret_key = 'aj@2lL!OA0NU'
     app.debug = True
-    app.logger.info('App incializing at %s' % datetime.datetime.now())
+    app.logger.info('App started at %s' % datetime.datetime.now())
     app.run(host='0.0.0.0', port=8000)
+    app.logger.info('App stopped at %s' % datetime.datetime.now())
