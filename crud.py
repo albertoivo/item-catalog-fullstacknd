@@ -42,7 +42,7 @@ def newCategory(newCategory):
 
 # find a category by id
 def category(category_id):
-    return Category.query.filter_by(id=category_id).first_or_404();
+    return Category.query.filter_by(id=category_id).first_or_404()
 
 
 # edit a category
@@ -70,6 +70,9 @@ def newItem(newItem):
 # delete the item
 def deleteItem(item_id):
     item = itemById(item_id)
+    if item.picture_path:
+        os.remove(os.path.join(
+            app.config['UPLOAD_FOLDER'], item.picture_path))
     db.session.delete(item)
     db.session.commit()
 
