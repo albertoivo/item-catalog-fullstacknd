@@ -27,12 +27,15 @@ This is a project for Udacity Course Nanodegree Full Stack Web Developer.
 
 1. Fork it
 2. Clone it
-3. `cd log-analysis`
-4. `python3 main.py`
+3. `cd item-catalog-fullstacknd`
+4. `python project.py`
 
 ## Developed with
 
-* [Python 3](https://www.python.org/)
+* [Python](https://www.python.org/)
+* [Flask](http://flask.pocoo.org/)
+* [SQLAlchmy](http://www.sqlalchemy.org/)
+* [Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org/2.3/)
 
 ## Contributing
 
