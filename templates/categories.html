@@ -3,6 +3,16 @@
         <h1 class="card-header">Categories</h1>
     </a>
     {% for cat in categories %}
-    <a href="{{url_for('getItemsByCategory', category_name=cat.name)}}" class="category-name">{{ cat.name }}</a>
+    <p>
+        <a href="{{url_for('getItemsByCategory', category_name=cat.name)}}" class="category-name">{{ cat.name }}</a>
+        <div id="actions">
+            <a href="{{url_for('deleteCategory', cat_id=cat.id)}}" onclick="return confirm('Removing this category \'{{ cat.name }}\' will remove all its items. Proceed?')">
+                <i class="fa fa-trash-o"></i>
+            </a>
+            <a href="{{url_for('editCategory', category_id=cat.id)}}">
+                <i class="fa fa-pencil"></i>
+            </a>
+        </div>
+    </p>
     {% endfor %}
 </div>
