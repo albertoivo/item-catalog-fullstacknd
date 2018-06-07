@@ -11,8 +11,11 @@ def createUser(login_session):
 
 
 def getUserInfo(user_id):
-    user = db.session.query(User).filter_by(id=user_id).one()
-    return user
+    try:
+        user = db.session.query(User).filter_by(id=user_id).one()
+        return user
+    except Exception:
+        return None
 
 
 def getUserID(email):
