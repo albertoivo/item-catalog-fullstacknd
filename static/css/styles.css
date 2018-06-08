@@ -1,6 +1,7 @@
 :root {
   --main-bgcolor: black;
   --main-ftcolor: white;
+  --card-color: #ffeead;
 }
 
 html,
@@ -107,7 +108,7 @@ a {
   flex: 1;
   min-width: 170px;
   margin: 10px;
-  background-color: #ffeead;
+  background-color: var(--card-color);
 }
 
 #welcome {
@@ -124,7 +125,7 @@ a {
   flex: 2;
   min-width: 300px;
   margin: 10px;
-  background-color: #ffeead;
+  background-color: var(--card-color);
 }
 
 #items img {
@@ -200,6 +201,9 @@ a {
   }
   .card-header {
     margin-left: 5px;
+  }
+  .bar {
+    padding: 5px;
   }
 }
 
