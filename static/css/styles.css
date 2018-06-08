@@ -44,7 +44,6 @@ footer {
   overflow: hidden;
   background-color: var(--main-bgcolor);
   color: var(--main-ftcolor);
-  padding-bottom: 5px;
 }
 
 a {
@@ -52,7 +51,7 @@ a {
   color: var(--main-ftcolor);
 }
 
-.bar > a {
+.bar>a {
   padding: 12px 24px;
   float: left;
 }
@@ -122,7 +121,7 @@ a {
 }
 
 #items {
-  flex: 3;
+  flex: 2;
   min-width: 300px;
   margin: 10px;
   background-color: #ffeead;
@@ -140,6 +139,8 @@ a {
 }
 
 .card-header {
+  font-size: 36px;
+  font-weight: bolder;
   margin-left: 10px;
   color: var(--main-bgcolor);
 }
@@ -160,6 +161,7 @@ a {
 }
 
 .item-category {
+  margin-left: 5px;
   font-style: italic;
   color: gray;
 }
@@ -195,6 +197,9 @@ a {
 @media screen and (max-width: 768px) {
   .hide-mobile {
     display: none;
+  }
+  .card-header {
+    margin-left: 5px;
   }
 }
 

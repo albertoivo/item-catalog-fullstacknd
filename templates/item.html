@@ -1,30 +1,27 @@
 {% extends "main.html" %} {% block content %} {% include 'categories.html' %}
 
 <div id="items" class="shadow">
-    {% if item %}
-    <h1 style="float:left" class="item-title">{{ item.title }}</h1>
-    <h4 class="item-category">({{ item.category.name }})</h4>
-    <br clear="all" />
-    <h3 class="item-description">{{ item.description }}</h3>
+  {% if item %}
+  <p>
+    <span class="card-header">{{ item.title }}</span>
+    <span class="item-category">({{ item.category.name }})</span>
+  </p>
+  <h3 class="item-description">{{ item.description }}</h3>
 
-    {% if item.picture_path %}
-    <img src="/static/img/items/{{item.picture_path}}" /> {% endif %} {% else %}
-    <h3 class="item-description">No items in this category with this name.</h3>
-    {% endif %}
-
-    {% if 'username' in login_session %}
-    {% if login_session['email'] == item.user.email %}
-    <div id="actions" style="text-align: right; margin: 0px 50px 10px 0px">
-        <a href="{{url_for('deleteItem', item_id=item.id)}}" onclick="return confirm('Are you sure you want delete the item \'{{ item.title }}\'?')">
-            <i class="fa fa-trash-o"></i>
-        </a>
-        <a href="{{url_for('editItem', item_id=item.id)}}">
-            <i class="fa fa-pencil"></i>
-        </a>
-    </div>
-    {% endif %}
-    {% endif %}
-    <h5 style="text-align: right; margin-right: 10px">registered by {{ item.user.name }}</h5>
+  {% if item.picture_path %}
+  <img src="/static/img/items/{{item.picture_path}}" /> {% endif %} {% else %}
+  <h3 class="item-description">No items in this category with this name.</h3>
+  {% endif %} {% if 'username' in login_session %} {% if login_session['email'] == item.user.email %}
+  <div id="actions" style="text-align: right; margin: 0px 50px 10px 0px">
+    <a href="{{url_for('deleteItem', item_id=item.id)}}" onclick="return confirm('Are you sure you want delete the item \'{{ item.title }}\'?')">
+      <i class="fa fa-trash-o"></i>
+    </a>
+    <a href="{{url_for('editItem', item_id=item.id)}}">
+      <i class="fa fa-pencil"></i>
+    </a>
+  </div>
+  {% endif %} {% endif %}
+  <h5 style="text-align: right; margin-right: 10px">registered by {{ item.user.name }}</h5>
 </div>
 
 {% endblock %}
