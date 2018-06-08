@@ -234,8 +234,10 @@ def main():
 def getItemsByCategory(category_name):
     cats = crud.allCategories()
     items_by_category = crud.itemsByCategory(category_name)
-    return render_template('catalog.html', categories=cats, qty=len(items_by_category),
-                           items=items_by_category, login_session=login_session)
+    return render_template('catalog.html', categories=cats,
+                           qty=len(items_by_category),
+                           items=items_by_category,
+                           login_session=login_session)
 
 
 # Get the selected item description
@@ -243,7 +245,8 @@ def getItemsByCategory(category_name):
 def getItem(category_name, item_title):
     cats = crud.allCategories()
     item = crud.item(category_name, item_title)
-    return render_template('item.html', categories=cats, item=item, login_session=login_session)
+    return render_template('item.html', categories=cats, item=item,
+                           login_session=login_session)
 
 
 # Add Category
@@ -261,7 +264,8 @@ def newCategory():
         flash('%s Successfully Created' % newCategory.name)
         return redirect(url_for('main'))
     else:
-        return render_template('new_category.html', login_session=login_session)
+        return render_template('new_category.html',
+                               login_session=login_session)
 
 
 # Edit Category
@@ -279,7 +283,8 @@ def editCategory(category_id):
             flash('\"%s\" Successfully Edited' % name)
     else:
         cat = crud.category(category_id)
-        return render_template('new_category.html', category=cat, login_session=login_session)
+        return render_template('new_category.html', category=cat,
+                               login_session=login_session)
 
     return redirect(url_for('main'))
 
@@ -330,10 +335,12 @@ def newItem():
         app.logger.info('Item %s created.' % newItem.title)
         flash('\"%s\" Successfully Created' % newItem.title)
 
-        return redirect(url_for('getItemsByCategory', category_name=newItem.category.name))
+        return redirect(url_for('getItemsByCategory',
+                                category_name=newItem.category.name))
     else:
         cats = crud.allCategories()
-        return render_template('new_item.html', categories=cats, login_session=login_session)
+        return render_template('new_item.html', categories=cats,
+                               login_session=login_session)
 
 
 # Delete Item
@@ -396,7 +403,8 @@ def editItem(item_id):
     else:
         cats = crud.allCategories()
 
-        return render_template('new_item.html', item=itemToBeEdited, categories=cats, login_session=login_session)
+        return render_template('new_item.html', item=itemToBeEdited,
+                               categories=cats, login_session=login_session)
 
     return redirect(url_for('main'))
 
@@ -416,7 +424,8 @@ def catalogJSON():
 # Error Handler
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('page_not_found.html', error=error, login_session=login_session), 404
+    return render_template('page_not_found.html', error=error,
+                           login_session=login_session), 404
 
 
 # Handle a CSRF error that may occur
