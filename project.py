@@ -315,15 +315,12 @@ def newItem():
 
     if request.method == 'POST':
         picture_path = ''
-
         try:
-            if request.files['picture']:
-                picture = request.files['picture']
-
-                if picture and allowed_file(picture.filename):
-                    picture_path = secure_filename(picture.filename)
-                    picture.save(os.path.join(
-                        app.config['UPLOAD_FOLDER'], picture_path))
+            picture = request.files['picture']
+            if picture and allowed_file(picture.filename):
+                picture_path = secure_filename(picture.filename)
+                picture.save(os.path.join(
+                    app.config['UPLOAD_FOLDER'], picture_path))
         except:
             pass
 
