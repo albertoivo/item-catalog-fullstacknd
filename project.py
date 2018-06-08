@@ -348,7 +348,7 @@ def deleteItem(item_id):
     cat_name = item.category.name
     user_id = getUserID(login_session['email'])
     user = getUserInfo(user_id)
-    if user.email == item.user.name:
+    if user.email == item.user.email:
         crud.deleteItem(item_id)
     else:
         error = 'You can delete only items that you created!'
@@ -384,7 +384,9 @@ def editItem(item_id):
             picture.save(os.path.join(
                 app.config['UPLOAD_FOLDER'], picture_path))
 
-        if user.email == item.user.name:
+        user_id = getUserID(login_session['email'])
+        user = getUserInfo(user_id)
+        if user.email == itemToBeEdited.user.email:
             crud.editItem(item_id, title, description, picture_path, cat_id)
         else:
             error = 'You can edit only items the you created!'
