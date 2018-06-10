@@ -7,8 +7,7 @@ from flask_wtf.csrf import CSRFProtect, CSRFError
 
 from model import Category, Item, User, db
 
-from user_helper import createUser, getUserInfo, getUserID, delLoginSession
-
+import user_helper
 import crud
 import random
 import string
@@ -129,9 +128,9 @@ def gconnect():
         login_session['gplus_id'] = gplus_id
 
         # see if user exists, if it doesn't make a new one
-        user_id = getUserID(login_session['email'])
+        user_id = user_helper.getUserID(login_session['email'])
         if not user_id:
-            user_id = createUser(login_session)
+            user_id = user_helper.createUser(login_session)
         login_session['user_id'] = user_id
 
         # Get user info
@@ -153,9 +152,9 @@ def gconnect():
 
     try:
         # see if user exists, if it doesn't make a new one
-        user_id = getUserID(login_session['email'])
+        user_id = user_helper.getUserID(login_session['email'])
         if not user_id:
-            user_id = createUser(login_session)
+            user_id = user_helper.createUser(login_session)
         login_session['user_id'] = user_id
     except Exception:
         pass
@@ -171,9 +170,9 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
-    userID = getUserID(login_session['email'])
+    userID = user_helper.getUserID(login_session['email'])
     if not userID:
-        createUser(login_session)
+        user_helper.createUser(login_session)
 
     output = ''
     output += '<h1>Welcome, '
@@ -203,7 +202,7 @@ def gdisconnect():
     result = h.request(url, 'GET')[0]
     if result['status'] == '200':
         # Reset the user's sesson.
-        delLoginSession(login_session)
+        user_helper.delLoginSession(login_session)
 
         # response = make_response(
         #   json.dumps('Successfully disconnected.'), 200)
@@ -211,7 +210,7 @@ def gdisconnect():
         return redirect('/')  # , response
     else:
         # Reset the user's sesson.
-        delLoginSession(login_session)
+        user_helper.delLoginSession(login_session)
 
         # For whatever reason, the given token was invalid.
         response = make_response(
@@ -324,11 +323,14 @@ def newItem():
         except:
             pass
 
+        email = login_session['email']
+        user = user_helper.getUserByEmail(email=email)
         newItem = Item(
             title=request.form['title'],
             description=request.form['description'],
             cat_id=request.form['category'],
-            picture_path=picture_path
+            picture_path=picture_path,
+            user=user
         )
 
         crud.newItem(newItem)
@@ -354,8 +356,8 @@ def deleteItem(item_id):
 
     item = crud.itemById(item_id)
     cat_name = item.category.name
-    user_id = getUserID(login_session['email'])
-    user = getUserInfo(user_id)
+    user_id = user_helper.getUserID(login_session['email'])
+    user = user_helper.getUserInfo(user_id)
     if user.email == item.user.email:
         crud.deleteItem(item_id)
     else:
@@ -392,8 +394,8 @@ def editItem(item_id):
             picture.save(os.path.join(
                 app.config['UPLOAD_FOLDER'], picture_path))
 
-        user_id = getUserID(login_session['email'])
-        user = getUserInfo(user_id)
+        user_id = user_helper.getUserID(login_session['email'])
+        user = user_helper.getUserInfo(user_id)
         if user.email == itemToBeEdited.user.email:
             crud.editItem(item_id, title, description, picture_path, cat_id)
         else:

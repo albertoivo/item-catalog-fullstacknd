@@ -26,6 +26,13 @@ def getUserID(email):
         return None
 
 
+def getUserByEmail(email):
+    try:
+        return db.session.query(User).filter_by(email=email).one()
+    except Exception:
+        return None
+
+
 def delLoginSession(login_session):
     del login_session['access_token']
     del login_session['gplus_id']
