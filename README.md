@@ -8,7 +8,8 @@
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
 
 
-This is a project for Udacity Course Nanodegree Full Stack Web Developer.
+This is a project for Udacity Course Nanodegree Full Stack Web Developer. It's a catalog of products categorized by categories. Any authenticated user can add items in the app. But only the owner can delete or edit the item.
+For this project I developed with Python, Flask and SQLAlchemy in the backend. SQLite for the data persistence and pure HTML/CSS/JS for the frontend.
 
 ## Table of contents
 
@@ -21,7 +22,7 @@ This is a project for Udacity Course Nanodegree Full Stack Web Developer.
 
 ## Prerequisites
 
-
+-   Please read the [requisites file](requisites.txt) file for for more information.
 
 ## Quick start
 
@@ -36,10 +37,11 @@ This is a project for Udacity Course Nanodegree Full Stack Web Developer.
 * [Flask](http://flask.pocoo.org/)
 * [SQLAlchmy](http://www.sqlalchemy.org/)
 * [Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org/2.3/)
+* [SQLite]()
 
 ## Contributing
 
-We welcome contributions to log-analysis!
+We welcome contributions to this project!
 
 -   ⇄ Pull requests and ★ Stars are always welcome.
 
