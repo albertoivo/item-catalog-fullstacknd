@@ -38,7 +38,7 @@
                     <label for="picture">Picture</label>
                 </div>
                 <div class="col-75">
-                    <input type="file" id="picture" name="picture" placeholder="Item title">
+                    <input type="file" id="picture" name="picture">
                 </div>
             </div>
 
@@ -53,7 +53,9 @@
                     <select id="category" name="category">
                     {% endif %}
                         {% for cat in categories %}
-                        <option value="{{ cat.id }}">{{ cat.name }}</option>
+                        <option value="{{ cat.id }}" {% if item.cat_id == cat.id %} selected {% endif %}>
+                            {{ cat.name }}
+                        </option>
                         {% endfor %}
                     </select>
                 </div>
