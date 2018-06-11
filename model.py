@@ -56,7 +56,8 @@ class Item(db.Model):
     created = db.Column(db.DateTime, nullable=False,
                         default=datetime.utcnow, onupdate=datetime.utcnow)
     cat_id = db.Column(db.Integer, db.ForeignKey('category.id'))
-    category = db.relationship(Category, backref=db.backref("Item", cascade="all,delete"))
+    category = db.relationship(
+        Category, backref=db.backref("Item", cascade="all,delete"))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship(User)
 
