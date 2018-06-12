@@ -34,12 +34,6 @@ def item(category_name, item_title):
     return Item.query.filter_by(title=item_title, category=cat).first_or_404()
 
 
-# get the whole item by category id and item title
-def itemRepeated(category_id, item_title):
-    cat = Category.query.filter_by(id=category_id).first()
-    item = Item.query.filter_by(title=item_title, category=cat).first()
-    return True if item else False
-
 def itemById(item_id):
     return Item.query.filter_by(id=item_id).first_or_404()
 

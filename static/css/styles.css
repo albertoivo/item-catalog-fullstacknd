@@ -196,13 +196,31 @@ a {
   margin: auto;
 }
 
-#flash {
+#flash_success {
   position: absolute;
   background-color: #d4edda;
   color: #155724;
   width: 100%;
   line-height: 0px;
   border-color: #c3e6cb;
+}
+
+#flash_error {
+  position: absolute;
+  background-color: #f8d7da;
+  color: #721c24;
+  width: 100%;
+  line-height: 0px;
+  border-color: #f5c6cb;
+}
+
+#flash_primary {
+  position: absolute;
+  background-color: #cce5ff;
+  color: #004085;
+  width: 100%;
+  line-height: 0px;
+  border-color: #b8daff;
 }
 
 @media screen and (max-width: 768px) {

@@ -7,6 +7,8 @@ from flask_wtf.csrf import CSRFProtect, CSRFError
 
 from model import Category, Item, User, db
 
+from validation import isUserLoggedIn, isItemFormValid, isItemRepeated
+
 import os
 import crud
 import json
@@ -181,7 +183,8 @@ def gconnect():
     output += '<img src="'
     output += login_session['picture']
     output += '" style = "width: 300px; height: 300px; border-radius: 150px;>'
-    flash("You are now logged in as %s" % login_session['username'])
+    flash(u"You are now logged in as %s" %
+          login_session['username'], 'primary')
 
     return output
 
@@ -260,7 +263,7 @@ def newCategory():
             name=request.form['name']
         )
         crud.newCategory(newCategory)
-        flash('%s Successfully Created' % newCategory.name)
+        flash(u'%s Successfully Created' % newCategory.name, 'success')
         return redirect(url_for('main'))
     else:
         return render_template('new_category.html',
@@ -279,7 +282,7 @@ def editCategory(category_id):
         name = request.form['name']
         if name:
             crud.editCategory(category_id, name)
-            flash('\"%s\" Successfully Edited' % name)
+            flash(u'\"%s\" Successfully Edited' % name, 'success')
     else:
         cat = crud.category(category_id)
         return render_template('new_category.html', category=cat,
@@ -299,7 +302,7 @@ def deleteCategory(cat_id):
     crud.deleteCategory(cat_id)
 
     app.logger.info('category %s deleted.' % cat_id)
-    flash('Category Successfully Deleted')
+    flash(u'Category Successfully Deleted', 'success')
 
     return redirect(url_for('main'))
 
@@ -307,25 +310,30 @@ def deleteCategory(cat_id):
 # Add Item
 @app.route('/item/new', methods=['GET', 'POST'])
 def newItem():
-    if 'username' not in login_session:
+    if not isUserLoggedIn(login_session):
         app.logger.error(
             'Not authenticated user trying to access a protected service.')
         return render_template('forbidden.html')
 
     if request.method == 'POST':
 
+        cats = crud.allCategories()
+
+        if not isItemFormValid(request.form):
+            flash(u'Item title and category are both mandatory', 'error')
+            return render_template('new_item.html', categories=cats,
+                                   login_session=login_session)
+
         item_title = request.form['title']
         cat_id = request.form['category']
-        if item_title and cat_id:
-            result = crud.itemRepeated(category_id=cat_id,
-                                       item_title=item_title)
-            if result:
-                cat_name = crud.categorynameById(cat_id)
-                print cat_name
-                flash('There is an item called %s in category %s' % item_title, cat_name)
-                cats = crud.allCategories()
-                return render_template('new_item.html', categories=cats,
-                                       login_session=login_session)
+
+        if isItemRepeated(category_id=cat_id, item_title=item_title):
+            cat_name = crud.categorynameById(cat_id)
+            flash(u'There is an item called %s in category %s'
+                  % (item_title, cat_name), 'error')
+
+            return render_template('new_item.html', categories=cats,
+                                   login_session=login_session)
 
         picture_path = ''
         try:
@@ -350,7 +358,7 @@ def newItem():
         crud.newItem(newItem)
 
         app.logger.info('Item %s created.' % newItem.title)
-        flash('\"%s\" Successfully Created' % newItem.title)
+        flash(u'\"%s\" Successfully Created' % newItem.title, 'success')
 
         return redirect(url_for('getItemsByCategory',
                                 category_name=newItem.category.name))
@@ -379,7 +387,7 @@ def deleteItem(item_id):
         return render_template('forbidden.html', error=error)
 
     app.logger.info('Item %s deleted' % item_id)
-    flash('Item Successfully Deleted')
+    flash(u'Item Successfully Deleted', 'success')
 
     return redirect(url_for('getItemsByCategory', category_name=cat_name))
 
@@ -392,12 +400,22 @@ def editItem(item_id):
         app.logger.error(error)
         return render_template('forbidden.html', error=error)
 
+    cats = crud.allCategories()
     itemToBeEdited = crud.itemById(item_id)
 
     if request.method == 'POST':
         title = request.form['title']
         description = request.form['description']
         cat_id = request.form['category']
+
+        if isItemRepeated(category_id=cat_id, item_title=title):
+            cat_name = crud.categorynameById(cat_id)
+            flash(u'There is an item called %s in category %s'
+                  % (title, cat_name), 'error')
+
+            return render_template('new_item.html', categories=cats,
+                                   login_session=login_session)
+
         picture_path = itemToBeEdited.picture_path
         try:
             picture = request.files['picture']
@@ -418,10 +436,8 @@ def editItem(item_id):
             error = 'You can edit only items the you created!'
             return render_template('forbidden.html', error=error)
 
-        flash('Item Successfully Edited')
+        flash(u'Item Successfully Edited', 'success')
     else:
-        cats = crud.allCategories()
-
         return render_template('new_item.html', item=itemToBeEdited,
                                categories=cats, login_session=login_session)
 
