@@ -313,6 +313,20 @@ def newItem():
         return render_template('forbidden.html')
 
     if request.method == 'POST':
+
+        item_title = request.form['title']
+        cat_id = request.form['category']
+        if item_title and cat_id:
+            result = crud.itemRepeated(category_id=cat_id,
+                                       item_title=item_title)
+            if result:
+                cat_name = crud.categorynameById(cat_id)
+                print cat_name
+                flash('There is an item called %s in category %s' % item_title, cat_name)
+                cats = crud.allCategories()
+                return render_template('new_item.html', categories=cats,
+                                       login_session=login_session)
+
         picture_path = ''
         try:
             picture = request.files['picture']
@@ -384,15 +398,17 @@ def editItem(item_id):
         title = request.form['title']
         description = request.form['description']
         cat_id = request.form['category']
-        picture = request.files['picture']
-        picture_path = ''
-        if picture and allowed_file(picture.filename):
-            if itemToBeEdited.picture_path:
+        picture_path = itemToBeEdited.picture_path
+        try:
+            picture = request.files['picture']
+            if picture and allowed_file(picture.filename):
                 os.remove(os.path.join(
                     app.config['UPLOAD_FOLDER'], itemToBeEdited.picture_path))
-            picture_path = secure_filename(picture.filename)
-            picture.save(os.path.join(
-                app.config['UPLOAD_FOLDER'], picture_path))
+                picture_path = secure_filename(picture.filename)
+                picture.save(os.path.join(
+                    app.config['UPLOAD_FOLDER'], picture_path))
+        except Exception:
+            pass
 
         user_id = user_helper.getUserID(login_session['email'])
         user = user_helper.getUserInfo(user_id)
