@@ -25,6 +25,8 @@
     {% block content %} {% endblock %}
   </div>
 
+  {% include 'footer.html' %}
+
   <!-- Calling script for navbar -->
   <script src="{{ url_for( 'static', filename='js/utils.js' ) }} "></script>
 

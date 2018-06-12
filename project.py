@@ -9,13 +9,11 @@ from model import Category, Item, User, db
 
 import user_helper
 import crud
-import random
 import string
-import json
-import httplib2
+import random
 import requests
-import os
 import datetime
+import httplib2
 
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 
@@ -181,7 +179,7 @@ def gconnect():
     output += '<img src="'
     output += login_session['picture']
     output += '" style = "width: 300px; height: 300px; border-radius: 150px;>'
-    flash("you are now logged in as %s" % login_session['username'])
+    flash("You are now logged in as %s" % login_session['username'])
 
     return output
 
@@ -320,7 +318,7 @@ def newItem():
                 picture_path = secure_filename(picture.filename)
                 picture.save(os.path.join(
                     app.config['UPLOAD_FOLDER'], picture_path))
-        except:
+        except Exception:
             pass
 
         email = login_session['email']

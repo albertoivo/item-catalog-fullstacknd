@@ -6,12 +6,9 @@
 
 html,
 body {
-  box-sizing: border-box;
-  height: 100%;
-}
-
-body {
-  margin: 0px;
+  margin:0;
+  padding:0;
+  height:100%;
 }
 
 .container {
@@ -33,6 +30,13 @@ footer {
   background-color: var(--main-bgcolor);
   color: var(--main-bftcolor);
   padding: 16px;
+  clear: both;
+  position: relative;
+  z-index: 10;
+}
+
+footer p {
+  color: var(--main-ftcolor);
 }
 
 .logo {
@@ -52,7 +56,7 @@ a {
   color: var(--main-ftcolor);
 }
 
-.bar>a {
+.bar > a {
   padding: 12px 24px;
   float: left;
 }
@@ -159,6 +163,12 @@ a {
   margin-left: 20px;
   color: var(--main-bgcolor);
   float: left;
+}
+
+.item-title-unlogged {
+  font-weight: bolder;
+  margin-left: 20px;
+  color: var(--main-bgcolor);
 }
 
 .item-category {
