@@ -1,5 +1,6 @@
 from model import Category, Item, User, db
 
+
 # check if user is logged in
 def isUserLoggedIn(login_session):
     return 'username' in login_session
@@ -8,6 +9,7 @@ def isUserLoggedIn(login_session):
 # validate the item form
 def isItemFormValid(form):
     return form['title'] and form['category']
+
 
 # validate
 def isItemRepeated(category_id, item_title):
