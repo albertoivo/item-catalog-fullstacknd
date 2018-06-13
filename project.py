@@ -2,13 +2,11 @@ from flask import Flask, jsonify, render_template, request
 from flask import flash, make_response, redirect, url_for
 from flask import session as login_session
 from flask_sqlalchemy import SQLAlchemy
-
 from flask_wtf.csrf import CSRFProtect, CSRFError
-
 from model import Category, Item, User, db
-
 from validation import isUserLoggedIn, isItemFormValid, isItemRepeated
-
+from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
+from werkzeug.utils import secure_filename
 import os
 import crud
 import json
@@ -19,9 +17,6 @@ import datetime
 import httplib2
 import user_helper
 
-from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
-
-from werkzeug.utils import secure_filename
 
 # Protect application from third party attack
 csrf = CSRFProtect()
@@ -29,13 +24,12 @@ csrf = CSRFProtect()
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/img/items')
 
+# client secrets for google sign in
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Catalog Item Application"
 
-
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///itemcatalog.db'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
@@ -346,8 +340,7 @@ def newItem():
             picture = request.files['picture']
             if picture and allowed_file(picture.filename):
                 picture_path = secure_filename(picture.filename)
-                picture.save(os.path.join(
-                    app.config['UPLOAD_FOLDER'], picture_path))
+                picture.save(os.path.join(UPLOAD_FOLDER, picture_path))
         except Exception:
             pass
 

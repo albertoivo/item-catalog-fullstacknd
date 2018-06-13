@@ -3,6 +3,7 @@ from sqlalchemy import update
 from model import Category, Item, User, db
 import os
 
+
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/img/items')
 
@@ -52,6 +53,7 @@ def category(category_id):
 # get the category name
 def categorynameById(category_id):
     return Category.query.filter_by(id=category_id).first().name
+
 
 # edit a category
 def editCategory(category_id, name):
