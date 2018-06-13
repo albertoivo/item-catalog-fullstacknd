@@ -1,10 +1,13 @@
+#!/usr/bin/env python
+
 from flask import Flask, jsonify, render_template, request
 from flask import flash, make_response, redirect, url_for
 from flask import session as login_session
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from model import Category, Item, User, db
-from validation import isUserLoggedIn, isItemFormValid, isItemRepeated
+from validation import isUserLoggedIn, isItemFormValid
+from validation import isItemRepeated, allowed_file
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 from werkzeug.utils import secure_filename
 import os
@@ -17,7 +20,6 @@ import datetime
 import httplib2
 import user_helper
 
-
 # Protect application from third party attack
 csrf = CSRFProtect()
 
@@ -25,8 +27,8 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/img/items')
 
 # client secrets for google sign in
-CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
+CLIENT_ID = json.loads(open('client_secrets.json',
+                            'r').read())['web']['client_id']
 APPLICATION_NAME = "Catalog Item Application"
 
 app = Flask(__name__)
@@ -37,13 +39,6 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
 csrf.init_app(app)
 
 db = SQLAlchemy(app)
-
-
-# Check if the picture is have an allowed extension
-def allowed_file(filename):
-    ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 # Create anti-forgery state token
@@ -83,8 +78,8 @@ def gconnect():
 
     # Check that the access token is valid.
     access_token = credentials.access_token
-    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
-           % access_token)
+    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' %
+           access_token)
     # Submit request, parse response - Python3 compatible
     h = httplib2.Http()
     response = h.request(url, 'GET')[1]
@@ -115,8 +110,8 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps(
-            'Current user is already connected.'), 200)
+        response = make_response(
+            json.dumps('Current user is already connected.'), 200)
         response.headers['Content-Type'] = 'application/json'
 
         # Store the access token in the session for later use.
@@ -183,8 +178,8 @@ def gconnect():
     output += '<img src="'
     output += login_session['picture']
     output += '" style = "width: 300px; height: 300px; border-radius: 150px;>'
-    flash(u"You are now logged in as %s" %
-          login_session['username'], 'primary')
+    flash(u"You are now logged in as %s" % login_session['username'],
+          'primary')
 
     return output
 
@@ -227,8 +222,12 @@ def gdisconnect():
 def main():
     cats = crud.allCategories()
     latest_items = crud.latestItem()
-    return render_template('catalog.html', categories=cats, items=latest_items,
-                           main_screen=True, login_session=login_session)
+    return render_template(
+        'catalog.html',
+        categories=cats,
+        items=latest_items,
+        main_screen=True,
+        login_session=login_session)
 
 
 # Get all Items by a selected Category
@@ -236,10 +235,12 @@ def main():
 def getItemsByCategory(category_name):
     cats = crud.allCategories()
     items_by_category = crud.itemsByCategory(category_name)
-    return render_template('catalog.html', categories=cats,
-                           qty=len(items_by_category),
-                           items=items_by_category,
-                           login_session=login_session)
+    return render_template(
+        'catalog.html',
+        categories=cats,
+        qty=len(items_by_category),
+        items=items_by_category,
+        login_session=login_session)
 
 
 # Get the selected item description
@@ -247,8 +248,8 @@ def getItemsByCategory(category_name):
 def getItem(category_name, item_title):
     cats = crud.allCategories()
     item = crud.item(category_name, item_title)
-    return render_template('item.html', categories=cats, item=item,
-                           login_session=login_session)
+    return render_template(
+        'item.html', categories=cats, item=item, login_session=login_session)
 
 
 # Add Category
@@ -259,15 +260,13 @@ def newCategory():
             'Not authenticated user trying to access a protected service.')
         return render_template('forbidden.html')
     if request.method == 'POST':
-        newCategory = Category(
-            name=request.form['name']
-        )
+        newCategory = Category(name=request.form['name'])
         crud.newCategory(newCategory)
         flash(u'%s Successfully Created' % newCategory.name, 'success')
         return redirect(url_for('main'))
     else:
-        return render_template('new_category.html',
-                               login_session=login_session)
+        return render_template(
+            'new_category.html', login_session=login_session)
 
 
 # Edit Category
@@ -285,8 +284,8 @@ def editCategory(category_id):
             flash(u'\"%s\" Successfully Edited' % name, 'success')
     else:
         cat = crud.category(category_id)
-        return render_template('new_category.html', category=cat,
-                               login_session=login_session)
+        return render_template(
+            'new_category.html', category=cat, login_session=login_session)
 
     return redirect(url_for('main'))
 
@@ -321,19 +320,20 @@ def newItem():
 
         if not isItemFormValid(request.form):
             flash(u'Item title and category are both mandatory', 'error')
-            return render_template('new_item.html', categories=cats,
-                                   login_session=login_session)
+            return render_template(
+                'new_item.html', categories=cats, login_session=login_session)
 
         item_title = request.form['title']
         cat_id = request.form['category']
 
         if isItemRepeated(category_id=cat_id, item_title=item_title):
             cat_name = crud.categorynameById(cat_id)
-            flash(u'There is an item called %s in category %s'
-                  % (item_title, cat_name), 'error')
+            flash(
+                u'There is an item called %s in category %s' %
+                (item_title, cat_name), 'error')
 
-            return render_template('new_item.html', categories=cats,
-                                   login_session=login_session)
+            return render_template(
+                'new_item.html', categories=cats, login_session=login_session)
 
         picture_path = ''
         try:
@@ -351,20 +351,19 @@ def newItem():
             description=request.form['description'],
             cat_id=request.form['category'],
             picture_path=picture_path,
-            user=user
-        )
+            user=user)
 
         crud.newItem(newItem)
 
         app.logger.info('Item %s created.' % newItem.title)
         flash(u'\"%s\" Successfully Created' % newItem.title, 'success')
 
-        return redirect(url_for('getItemsByCategory',
-                                category_name=newItem.category.name))
+        return redirect(
+            url_for('getItemsByCategory', category_name=newItem.category.name))
     else:
         cats = crud.allCategories()
-        return render_template('new_item.html', categories=cats,
-                               login_session=login_session)
+        return render_template(
+            'new_item.html', categories=cats, login_session=login_session)
 
 
 # Delete Item
@@ -410,11 +409,14 @@ def editItem(item_id):
         if itemToBeEdited.title != title:
             if isItemRepeated(category_id=cat_id, item_title=title):
                 cat_name = crud.categorynameById(cat_id)
-                flash(u'There is an item called %s in category %s'
-                      % (title, cat_name), 'error')
+                flash(
+                    u'There is an item called %s in category %s' %
+                    (title, cat_name), 'error')
 
-                return render_template('new_item.html', categories=cats,
-                                       login_session=login_session)
+                return render_template(
+                    'new_item.html',
+                    categories=cats,
+                    login_session=login_session)
 
         picture_path = itemToBeEdited.picture_path
         try:
@@ -422,8 +424,9 @@ def editItem(item_id):
             if picture and allowed_file(picture.filename):
                 try:
                     # in case there isn't a pic before, it raises an excpetion
-                    os.remove(os.path.join(UPLOAD_FOLDER,
-                                           itemToBeEdited.picture_path))
+                    os.remove(
+                        os.path.join(UPLOAD_FOLDER,
+                                     itemToBeEdited.picture_path))
                 finally:
                     picture_path = secure_filename(picture.filename)
                     picture.save(os.path.join(UPLOAD_FOLDER, picture_path))
@@ -440,8 +443,11 @@ def editItem(item_id):
 
         flash(u'Item Successfully Edited', 'success')
     else:
-        return render_template('new_item.html', item=itemToBeEdited,
-                               categories=cats, login_session=login_session)
+        return render_template(
+            'new_item.html',
+            item=itemToBeEdited,
+            categories=cats,
+            login_session=login_session)
 
     return redirect(url_for('main'))
 
@@ -454,15 +460,16 @@ def catalogJSON():
     catalog = {"Category": [cat.serialize for cat in categories]}
     for cat in catalog["Category"]:
         cat["item"] = [
-            item.serialize for item in items if item.cat_id == cat['id']]
+            item.serialize for item in items if item.cat_id == cat['id']
+        ]
     return jsonify(catalog)
 
 
 # Error Handler
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('page_not_found.html', error=error,
-                           login_session=login_session), 404
+    return render_template(
+        'page_not_found.html', error=error, login_session=login_session), 404
 
 
 # Handle a CSRF error that may occur
