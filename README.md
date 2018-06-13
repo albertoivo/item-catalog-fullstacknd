@@ -23,11 +23,10 @@ For this project I developed with Python, Flask and SQLAlchemy in the backend. S
 ## Requirements
 
 -   Please read the [requirements file](requirements.txt) file for for more information or run the following command:
--   `pip install -r requirements.txt`
-
+ -   `pip install -r requirements.txt`
 -   If you do not have `pip`, please install it by running the following commands:
--   `curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py`
--   `python get-pip.py`
+ -   `curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py`
+ -   `python get-pip.py`
 
 ## Quick start
 
