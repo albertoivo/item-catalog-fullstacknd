@@ -414,23 +414,26 @@ def editItem(item_id):
         description = request.form['description']
         cat_id = request.form['category']
 
-        if isItemRepeated(category_id=cat_id, item_title=title):
-            cat_name = crud.categorynameById(cat_id)
-            flash(u'There is an item called %s in category %s'
-                  % (title, cat_name), 'error')
+        if itemToBeEdited.title != title:
+            if isItemRepeated(category_id=cat_id, item_title=title):
+                cat_name = crud.categorynameById(cat_id)
+                flash(u'There is an item called %s in category %s'
+                      % (title, cat_name), 'error')
 
-            return render_template('new_item.html', categories=cats,
-                                   login_session=login_session)
+                return render_template('new_item.html', categories=cats,
+                                       login_session=login_session)
 
         picture_path = itemToBeEdited.picture_path
         try:
             picture = request.files['picture']
             if picture and allowed_file(picture.filename):
-                os.remove(os.path.join(
-                    app.config['UPLOAD_FOLDER'], itemToBeEdited.picture_path))
-                picture_path = secure_filename(picture.filename)
-                picture.save(os.path.join(
-                    app.config['UPLOAD_FOLDER'], picture_path))
+                try:
+                    # in case there isn't a pic before, it raises an excpetion
+                    os.remove(os.path.join(UPLOAD_FOLDER,
+                                           itemToBeEdited.picture_path))
+                finally:
+                    picture_path = secure_filename(picture.filename)
+                    picture.save(os.path.join(UPLOAD_FOLDER, picture_path))
         except Exception:
             pass
 
