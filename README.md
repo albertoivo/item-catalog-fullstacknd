@@ -13,16 +13,17 @@ For this project I developed with Python, Flask and SQLAlchemy in the backend. S
 
 ## Table of contents
 
--   [Prerequisites](#prerequisites)
+-   [Requirements](#requirements)
 -   [Quick start](#quick-start)
 -   [Developed with](#developed-with)
 -   [Contributing](#contributing)
 -   [Author](#author)
 -   [License](#license)
 
-## Prerequisites
+## Requirements
 
--   Please read the [requisites file](requisites.txt) file for for more information.
+-   Please read the [requirements file](requirements.txt) file for for more information or run the following command:
+-   `pip install -r requirements.txt`
 
 ## Quick start
 
