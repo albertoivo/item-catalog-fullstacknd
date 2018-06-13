@@ -145,6 +145,7 @@ def gconnect():
         login_session['username'] = data['name']
         login_session['picture'] = data['picture']
         login_session['email'] = data['email']
+        login_session['gplus'] = data['link']
 
         return response
 
@@ -171,6 +172,11 @@ def gconnect():
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
+    login_session['gplus'] = data['link']
+
+    print '************************************************************'
+    print data
+    print '************************************************************'
 
     userID = user_helper.getUserID(login_session['email'])
     if not userID:

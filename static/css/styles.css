@@ -115,8 +115,14 @@ a {
   background-color: var(--card-color);
 }
 
-#welcome {
+.welcome {
   line-height: 40px;
+}
+
+.profile_pic {
+  height: 40px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 #logout {
@@ -232,6 +238,9 @@ a {
   }
   .bar {
     padding: 5px;
+  }
+  .welcome {
+    text-align: center;
   }
 }
 

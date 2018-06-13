@@ -4,10 +4,13 @@
     <a class="hide-desktop right" href="javascript:void(0)" onclick="toggleMenu()">
       <i class="fa fa-bars"></i>
     </a>
-    <a class="logo" href="/">Catalog</a> {% if 'username' not in login_session %}
-    <a class="hide-mobile hover-red right" href="{{url_for('showLogin')}}">Login</a> {% else %}
+    <a class="logo" href="/">Catalog</a>
+    {% if 'username' not in login_session %}
+    <a class="hide-mobile hover-red right" href="{{url_for('showLogin')}}">Login</a>
+    {% else %}
     <a id="logout" class="hide-mobile hover-red right" href='/logout'>(Logout)</a>
-    <span id="welcome" class="hide-mobile right">Welcome, {{ login_session['username'] }}</span>
+    <img src="{{ login_session['picture'] }}" class="hide-mobile right profile_pic" />
+    <span class="welcome hide-mobile right">Welcome, {{ login_session['username'] }}</span>
     <a href="/category/new" class="hide-mobile hover-green">Add Category</a>
     <a href="/item/new" class="hide-mobile hover-green">Add Item</a>
     <a href="/catalog.json" class="hide-mobile hover-green">JSON</a> {% endif %}
@@ -17,7 +20,10 @@
   <div id="bar-mobile" class="bar-block hide-desktop menu-mobile" style="margin-top:46px ">
     {% if 'username' not in login_session %}
     <a href="{{url_for('showLogin')}}" class="bar-item button hover-red">Login</a> {% else %}
-    <span class="bar-item">Welcome, {{ login_session['username'] }}</span>
+    <div class="welcome">
+      <span>Welcome, {{ login_session['username'] }}</span>
+      <img src="{{ login_session['picture'] }}" class="profile_pic" />
+    </div>
     <a href="/category/new" class="bar-item button hover-green">Add Category</a>
     <a href="/item/new" class="bar-item button hover-green">Add Item</a>
     <a href="/catalog.json" class="bar-item button hover-green">JSON</a>
