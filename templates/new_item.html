@@ -33,9 +33,8 @@
                     <label for="picture">Picture</label>
                 </div>
                 <div class="col-75">
-                    {% if not item %}
-                    <input type="file" id="picture" name="picture"> {% else %}
                     <input type="file" id="picture" name="picture">
+                    {% if item and item.picture_path %}
                     <img src="/static/img/items/{{item.picture_path}}" />
                      {% endif %}
                 </div>
