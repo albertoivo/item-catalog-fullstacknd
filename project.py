@@ -331,11 +331,11 @@ def newItem():
             return render_template(
                 'new_item.html', categories=cats, login_session=login_session)
 
-        picture_path = ''
+        picture_path = secure_filename(item_title) + "_"
         try:
             picture = request.files['picture']
             if picture and allowed_file(picture.filename):
-                picture_path = secure_filename(picture.filename)
+                picture_path = picture_path + secure_filename(picture.filename)
                 picture.save(os.path.join(UPLOAD_FOLDER, picture_path))
         except Exception:
             pass
@@ -424,7 +424,9 @@ def editItem(item_id):
                         os.path.join(UPLOAD_FOLDER,
                                      itemToBeEdited.picture_path))
                 finally:
-                    picture_path = secure_filename(picture.filename)
+                    picture_path = "%s_%s" % (secure_filename(title),
+                                              secure_filename(
+                                                  picture.filename))
                     picture.save(os.path.join(UPLOAD_FOLDER, picture_path))
         except Exception:
             pass
