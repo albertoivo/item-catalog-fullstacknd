@@ -163,10 +163,6 @@ def gconnect():
     login_session['email'] = data['email']
     login_session['gplus'] = data['link']
 
-    print '************************************************************'
-    print data
-    print '************************************************************'
-
     userID = user_helper.getUserID(login_session['email'])
     if not userID:
         user_helper.createUser(login_session)
@@ -327,7 +323,7 @@ def newItem():
         cat_id = request.form['category']
 
         if isItemRepeated(category_id=cat_id, item_title=item_title):
-            cat_name = crud.categorynameById(cat_id)
+            cat_name = crud.categoryNameById(cat_id)
             flash(
                 u'There is an item called %s in category %s' %
                 (item_title, cat_name), 'error')
@@ -408,7 +404,7 @@ def editItem(item_id):
 
         if itemToBeEdited.title != title:
             if isItemRepeated(category_id=cat_id, item_title=title):
-                cat_name = crud.categorynameById(cat_id)
+                cat_name = crud.categoryNameById(cat_id)
                 flash(
                     u'There is an item called %s in category %s' %
                     (title, cat_name), 'error')
