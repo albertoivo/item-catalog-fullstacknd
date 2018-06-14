@@ -50,7 +50,7 @@ def category(category_id):
 
 
 # get the category name
-def categorynameById(category_id):
+def categoryNameById(category_id):
     return Category.query.filter_by(id=category_id).first().name
 
 
@@ -64,10 +64,8 @@ def editCategory(category_id, name):
 # delete a category
 def deleteCategory(cat_id):
     cat = Category.query.filter_by(id=cat_id).first_or_404()
-
-    current_db_sessions = db.object_session(cat)
-    current_db_sessions.delete(cat)
-    current_db_sessions.commit()
+    db.session.delete(cat)
+    db.session.commit()
 
 
 # create a new Item
