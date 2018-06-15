@@ -40,6 +40,7 @@ csrf.init_app(app)
 
 db = SQLAlchemy(app)
 
+FORBIDDEN_ERROR_MSG = 'Not authenticated user trying to access a protected service.'
 
 # Create anti-forgery state token
 @app.route('/login')
@@ -252,8 +253,7 @@ def getItem(category_name, item_title):
 @app.route('/category/new', methods=['GET', 'POST'])
 def newCategory():
     if 'username' not in login_session:
-        app.logger.error(
-            'Not authenticated user trying to access a protected service.')
+        app.logger.error(FORBIDDEN_ERROR_MSG)
         return render_template('forbidden.html')
     if request.method == 'POST':
         newCategory = Category(name=request.form['name'])
@@ -269,8 +269,7 @@ def newCategory():
 @app.route('/category/<string:category_id>/edit', methods=['GET', 'POST'])
 def editCategory(category_id):
     if 'username' not in login_session:
-        app.logger.error(
-            'Not authenticated user trying to access a protected service.')
+        app.logger.error(FORBIDDEN_ERROR_MSG)
         return render_template('forbidden.html')
 
     if request.method == 'POST':
@@ -290,8 +289,7 @@ def editCategory(category_id):
 @app.route('/category/<string:cat_id>/delete')
 def deleteCategory(cat_id):
     if 'username' not in login_session:
-        app.logger.error(
-            'Not authenticated user trying to access a protected service.')
+        app.logger.error(FORBIDDEN_ERROR_MSG)
         return render_template('forbidden.html')
 
     crud.deleteCategory(cat_id)
@@ -306,8 +304,7 @@ def deleteCategory(cat_id):
 @app.route('/item/new', methods=['GET', 'POST'])
 def newItem():
     if not isUserLoggedIn(login_session):
-        app.logger.error(
-            'Not authenticated user trying to access a protected service.')
+        app.logger.error(FORBIDDEN_ERROR_MSG)
         return render_template('forbidden.html')
 
     if request.method == 'POST':
@@ -366,9 +363,8 @@ def newItem():
 @app.route('/item/<string:item_id>/delete', methods=['GET', 'POST'])
 def deleteItem(item_id):
     if 'username' not in login_session:
-        error = 'Not authenticated user trying to access a protected service.'
-        app.logger.error(error)
-        return render_template('forbidden.html', error=error)
+        app.logger.error(FORBIDDEN_ERROR_MSG)
+        return render_template('forbidden.html', error=FORBIDDEN_ERROR_MSG)
 
     item = crud.itemById(item_id)
     cat_name = item.category.name
@@ -390,9 +386,8 @@ def deleteItem(item_id):
 @app.route('/item/<string:item_id>/edit', methods=['GET', 'POST'])
 def editItem(item_id):
     if 'username' not in login_session:
-        error = 'Not authenticated user trying to access a protected service.'
-        app.logger.error(error)
-        return render_template('forbidden.html', error=error)
+        app.logger.error(FORBIDDEN_ERROR_MSG)
+        return render_template('forbidden.html', error=FORBIDDEN_ERROR_MSG)
 
     cats = crud.allCategories()
     itemToBeEdited = crud.itemById(item_id)
