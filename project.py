@@ -444,8 +444,10 @@ def editItem(item_id):
 
     return redirect(url_for('main'))
 
+
 @app.route('/profile')
 def profile():
+    app.logger.info('View Profile')
     return render_template('profile.html', login_session=login_session)
 
 
@@ -459,12 +461,14 @@ def catalogJSON():
         cat["item"] = [
             item.serialize for item in items if item.cat_id == cat['id']
         ]
+    app.logger.info('JSON requested')
     return jsonify(catalog)
 
 
 # Error Handler
 @app.errorhandler(404)
 def page_not_found(error):
+    app.logger.error(error.description)
     return render_template(
         'page_not_found.html', error=error, login_session=login_session), 404
 
@@ -472,6 +476,7 @@ def page_not_found(error):
 # Handle a CSRF error that may occur
 @app.errorhandler(CSRFError)
 def handle_csrf_error(e):
+    app.logger.error(e.description)
     return render_template('csrf_error.html', reason=e.description), 400
 
 
