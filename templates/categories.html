@@ -6,7 +6,19 @@
   </p>
   {% for cat in categories %}
   <p>
-    <a href="{{url_for('getItemsByCategory', category_name=cat.name)}}" class="category-name">{{ cat.name }}</a>
+    {% if 'username' in login_session and login_session['email'] == cat.user.email %}
+    <a href="{{url_for('getItemsByCategory', category_name=cat.name)}}" class="item-title">{{ cat.name }}</a>
+    <div id="actions">
+      <a href="{{url_for('deleteCategory', cat_id=cat.id)}}" onclick="return confirm('Are you sure you want delete the category \'{{ cat.title }}\'?')">
+        <i class="fa fa-trash-o"></i>
+      </a>
+      <a href="{{url_for('editCategory', category_id=cat.id)}}">
+        <i class="fa fa-pencil"></i>
+      </a>
+    </div>
+    {% else %}
+    <a href="{{url_for('getItemsByCategory', category_name=cat.name)}}" class="item-title-unlogged">{{ cat.name }}</a>
+    {% endif %}
   </p>
   {% endfor %}
 </div>

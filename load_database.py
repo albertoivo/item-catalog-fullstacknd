@@ -18,9 +18,18 @@ user1 = User(
 db.session.add(user1)
 db.session.commit()
 
+user2 = User(
+    name="Marianne Vieira",
+    email="mariannefarias@gmail.com",
+    picture=
+    "https://lh5.googleusercontent.com/-smnqdptNz7c/AAAAAAAAAAI/AAAAAAAAAAA/IXBlsOnx2yY/photo.jpg"
+)
+db.session.add(user2)
+db.session.commit()
+
 #   category 1   #
 
-cat = Category(name='Car')
+cat = Category(name='Car', user=user2)
 db.session.add(cat)
 db.session.commit()
 
@@ -38,7 +47,7 @@ item2 = Item(
     description='Sedan',
     category=cat,
     picture_path="civic.png",
-    user=user1)
+    user=user2)
 db.session.add(item2)
 db.session.commit()
 
@@ -53,7 +62,7 @@ db.session.commit()
 
 #   category 2   #
 
-cat = Category(name='Movies')
+cat = Category(name='Movies', user=user1)
 db.session.add(cat)
 db.session.commit()
 
@@ -63,6 +72,6 @@ db.session.add(item1)
 db.session.commit()
 
 item2 = Item(
-    title='Saving Private Ryan', description='Drama', category=cat, user=user1)
+    title='Saving Private Ryan', description='Drama', category=cat, user=user2)
 db.session.add(item2)
 db.session.commit()

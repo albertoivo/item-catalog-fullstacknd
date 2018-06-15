@@ -9,8 +9,8 @@
     <a class="hide-mobile hover-red right" href="{{url_for('showLogin')}}">Login</a>
     {% else %}
     <a id="logout" class="hide-mobile hover-red right" href='/logout'>(Logout)</a>
-    <img src="{{ login_session['picture'] }}" class="hide-mobile right profile_pic" />
-    <span class="welcome hide-mobile right">Welcome, {{ login_session['username'] }}</span>
+    <img src="{{ login_session['picture'] }}" class="hide-mobile right navbar_pic" />
+    <a href="/profile" class="hide-mobile right">Welcome, {{ login_session['username'] }}</a>
     <a href="/category/new" class="hide-mobile hover-green">Add Category</a>
     <a href="/item/new" class="hide-mobile hover-green">Add Item</a>
     <a href="/catalog.json" class="hide-mobile hover-green">JSON</a> {% endif %}
@@ -21,8 +21,8 @@
     {% if 'username' not in login_session %}
     <a href="{{url_for('showLogin')}}" class="bar-item button hover-red">Login</a> {% else %}
     <div class="welcome">
-      <span>Welcome, {{ login_session['username'] }}</span>
-      <img src="{{ login_session['picture'] }}" class="profile_pic" />
+      <a href="/profile">Welcome, {{ login_session['username'] }}</a>
+      <img src="{{ login_session['picture'] }}" class="navbar_pic" />
     </div>
     <a href="/category/new" class="bar-item button hover-green">Add Category</a>
     <a href="/item/new" class="bar-item button hover-green">Add Item</a>

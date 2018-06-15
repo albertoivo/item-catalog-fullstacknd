@@ -115,13 +115,27 @@ a {
   background-color: var(--card-color);
 }
 
-.welcome {
-  line-height: 40px;
+#profile {
+  width: 300px;
+  margin: 20px;
+  background-color: #96b2d1;
+}
+
+.navbar_pic {
+  height: 40px;
+  margin-left: 5px;
 }
 
 .profile_pic {
-  height: 40px;
-  margin-left: 5px;
+  flex: 1;
+}
+
+.profile_info {
+  flex: 1;
+}
+
+#profile p, h1 {
+  text-align: center;
 }
 
 #logout {
@@ -152,14 +166,6 @@ a {
   font-size: 36px;
   font-weight: bolder;
   margin-left: 10px;
-  color: var(--main-bgcolor);
-}
-
-.category-name {
-  display: block;
-  font-weight: bolder;
-  margin-left: 20px;
-  margin-bottom: 10px;
   color: var(--main-bgcolor);
 }
 
@@ -226,6 +232,19 @@ a {
   width: 100%;
   line-height: 0px;
   border-color: #b8daff;
+}
+
+#profile button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
 }
 
 @media screen and (max-width: 768px) {

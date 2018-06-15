@@ -1,0 +1,11 @@
+{% extends "main.html" %} {% block content %}
+
+<div id="profile" class="shadow">
+    <img style="width:100%" src="{{ login_session['picture'] }}" />
+    <h1>{{ login_session['username'] }}</h1>
+    <p>{{ login_session['email'] }}</p>
+    <p><a href="{{ login_session['gplus'] }}">Google Plus</a></p>
+    <button><a href="mailto:{{ login_session['email'] }}?Subject=Hello%20again" target="_top">Send Mail</a></button>
+</div>
+
+{% endblock %}

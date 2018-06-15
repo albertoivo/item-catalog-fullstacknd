@@ -158,6 +158,8 @@ def gconnect():
 
     data = answer.json()
 
+    print data
+
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
@@ -448,6 +450,10 @@ def editItem(item_id):
             login_session=login_session)
 
     return redirect(url_for('main'))
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html', login_session=login_session)
 
 
 # JSON APIs to view Catalog Information
