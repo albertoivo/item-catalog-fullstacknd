@@ -6,9 +6,9 @@
 
 html,
 body {
-  margin:0;
-  padding:0;
-  height:100%;
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 .container {
@@ -134,7 +134,8 @@ a {
   flex: 1;
 }
 
-#profile p, h1 {
+#profile p,
+h1 {
   text-align: center;
 }
 
@@ -245,6 +246,11 @@ a {
   cursor: pointer;
   width: 100%;
   font-size: 18px;
+}
+
+.registeredBy {
+  text-align: right;
+  margin-right: 10px;
 }
 
 @media screen and (max-width: 768px) {
