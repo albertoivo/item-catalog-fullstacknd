@@ -158,8 +158,6 @@ def gconnect():
 
     data = answer.json()
 
-    print data
-
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
