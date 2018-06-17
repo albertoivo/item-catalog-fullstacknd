@@ -40,7 +40,8 @@ csrf.init_app(app)
 
 db = SQLAlchemy(app)
 
-FORBIDDEN_ERROR_MSG = 'Not authenticated user trying to access a protected service.'
+FORBIDDEN_ERROR_MSG = 'Service for authenticated users only.'
+
 
 # Create anti-forgery state token
 @app.route('/login')
@@ -256,7 +257,8 @@ def newCategory():
         app.logger.error(FORBIDDEN_ERROR_MSG)
         return render_template('forbidden.html')
     if request.method == 'POST':
-        newCategory = Category(name=request.form['name'])
+        user = user_helper.getUserByEmail(login_session['email'])
+        newCategory = Category(name=request.form['name'], user=user)
         crud.newCategory(newCategory)
         flash(u'%s Successfully Created' % newCategory.name, 'success')
         return redirect(url_for('main'))

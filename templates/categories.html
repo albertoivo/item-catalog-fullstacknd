@@ -18,6 +18,8 @@
     </div>
     {% else %}
     <a href="{{url_for('getItemsByCategory', category_name=cat.name)}}" class="item-title-unlogged">{{ cat.name }}</a>
+    <span>login: {{login_session and login_session['email']}}</span>
+    <spa>email: {{cat.user.email}}</spa>
     {% endif %}
   </p>
   {% endfor %}

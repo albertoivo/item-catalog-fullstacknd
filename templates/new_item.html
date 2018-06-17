@@ -2,67 +2,64 @@
 
 <div id="items">
 
-    <div class="form">
-        <form action="#" enctype="multipart/form-data" method="POST">
+  <div class="form">
+    <form action="#" enctype="multipart/form-data" method="POST">
 
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
-            <div class="row">
-                <div class="col-25">
-                    <label for="title">Title *</label>
-                </div>
-                <div class="col-75">
-                    <input type="text" id="title" name="title" required
-                        {% if item %} value="{{ item.title }}" {% else %} placeholder="Item title" {% endif %}>
-                </div>
-            </div>
+      <div class="row">
+        <div class="col-25">
+          <label for="title">Title *</label>
+        </div>
+        <div class="col-75">
+          <input type="text" id="title" name="title" required {% if item %} value="{{ item.title }}" {% else %} placeholder="Item title" {% endif %}>
+        </div>
+      </div>
 
-            <div class="row">
-                <div class="col-25">
-                    <label for="description">Description</label>
-                </div>
-                <div class="col-75">
-                    {% if item %}
-                    <textarea id="description" name="description" style="height:200px">{{ item.description }}</textarea> {% else %}
-                    <textarea id="description" name="description" placeholder="Description" style="height:200px"></textarea> {% endif %}
-                </div>
-            </div>
+      <div class="row">
+        <div class="col-25">
+          <label for="description">Description</label>
+        </div>
+        <div class="col-75">
+          {% if item %}
+          <textarea id="description" name="description" style="height:200px">{{ item.description }}</textarea> {% else %}
+          <textarea id="description" name="description" placeholder="Description" style="height:200px"></textarea> {% endif %}
+        </div>
+      </div>
 
-            <div class="row">
-                <div class="col-25">
-                    <label for="picture">Picture</label>
-                </div>
-                <div class="col-75">
-                    <input type="file" id="picture" name="picture">
-                    {% if item and item.picture_path %}
-                    <img src="/static/img/items/{{item.picture_path}}" />
-                     {% endif %}
-                </div>
-            </div>
+      <div class="row">
+        <div class="col-25">
+          <label for="picture">Picture</label>
+        </div>
+        <div class="col-75">
+          <input type="file" id="picture" name="picture"> {% if item and item.picture_path %}
+          <img src="/static/img/items/{{item.picture_path}}" /> {% endif %}
+        </div>
+      </div>
 
-            <div class="row">
-                <div class="col-25">
-                    <label for="category">Category *</label>
-                </div>
-                <div class="col-75">
-                    <select required id="category" name="category" {% if item %} value="{{ item.cat_id }}" {% endif %}>
-                        <option disabled {% if not item %} selected {% endif %}>
-                            Choose a category
-                        </option>
-                        {% for cat in categories %}
-                        <option value="{{ cat.id }}" {% if item and item.cat_id==cat.id %} selected {% endif %}>
-                            {{ cat.name }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
+      <div class="row">
+        <div class="col-25">
+          <label for="category">Category *</label>
+        </div>
+        <div class="col-75">
+          <select required id="category" name="category" {% if item %} value="{{ item.cat_id }}" {% endif %}>
+                <option value="" disabled {% if not item %} selected {% endif %}>
+                    Choose a category
+                </option>
+                {% for cat in categories %}
+                <option value="{{ cat.id }}" {% if item and item.cat_id==cat.id %} selected {% endif %}>
+                    {{ cat.name }}
+                </option>
+                {% endfor %}
+          </select>
+        </div>
+      </div>
 
-            <div class="row">
-                <input type="submit" value="Submit">
-            </div>
-        </form>
-    </div>
+      <div class="row">
+        <input type="submit" value="Submit">
+      </div>
+    </form>
+  </div>
 
 </div>
 
