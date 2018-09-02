@@ -25,9 +25,11 @@ csrf = CSRFProtect()
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/img/items')
+CURRENT_DIR = os.path.dirname(__file__)
+client_secrets = os.path.join(CURRENT_DIR, 'client_secrets.json')
 
 # client secrets for google sign in
-CLIENT_ID = json.loads(open('client_secrets.json',
+CLIENT_ID = json.loads(open(client_secrets,
                             'r').read())['web']['client_id']
 APPLICATION_NAME = "Catalog Item Application"
 
