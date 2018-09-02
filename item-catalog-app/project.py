@@ -486,7 +486,7 @@ def handle_csrf_error(e):
 if __name__ == '__main__':
     app.secret_key = '_ROZOjB0Ph1aBQrSS_n1gD58'
     app.wtf_csrf_secret_key = 'aj@2lL!OA0NU'
-    app.debug = True
+    app.debug = False
     app.logger.info('App started at %s' % datetime.datetime.now())
-    app.run(host='0.0.0.0', port=8000)
+    app.run(port=80)
     app.logger.info('App stopped at %s' % datetime.datetime.now())
