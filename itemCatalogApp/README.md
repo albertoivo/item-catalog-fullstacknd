@@ -39,9 +39,9 @@ For this project I developed with Python, Flask and SQLAlchemy in the backend. S
 
 * [Python](https://www.python.org/)
 * [Flask](http://flask.pocoo.org/)
-* [SQLAlchmy](http://www.sqlalchemy.org/)
+* [SQLAlchemy](http://www.sqlalchemy.org/)
 * [Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org/2.3/)
-* [SQLite]()
+* [SQLite](https://www.sqlite.org)
 
 ## Contributing
 
@@ -51,7 +51,7 @@ We welcome contributions to this project!
 
 ## Author
 
-* **Alberto Ivo Vieira** - [Github](https://github.com/albertoivo)
+* **Alberto Ivo Vieira** - [Github](https://github.com/albertoivo) | [LinkedIn](https://www.linkedin.com/in/alberto-ivo-vieira/)
 
 ## License
 
