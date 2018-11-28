@@ -1,7 +1,7 @@
 from model import User, db
 
 
-def createUser(login_session):
+def create_user(login_session):
     newUser = User(name=login_session['username'], email=login_session[
                    'email'], picture=login_session['picture'])
     db.session.add(newUser)
@@ -10,7 +10,7 @@ def createUser(login_session):
     return user.id
 
 
-def getUserInfo(user_id):
+def get_user_info(user_id):
     try:
         user = db.session.query(User).filter_by(id=user_id).one()
         return user
@@ -18,7 +18,7 @@ def getUserInfo(user_id):
         return None
 
 
-def getUserID(email):
+def get_user_id(email):
     try:
         user = db.session.query(User).filter_by(email=email).one()
         return user.id
@@ -26,14 +26,14 @@ def getUserID(email):
         return None
 
 
-def getUserByEmail(email):
+def get_user_by_email(email):
     try:
         return db.session.query(User).filter_by(email=email).one()
     except Exception:
         return None
 
 
-def delLoginSession(login_session):
+def delete_login_session(login_session):
     del login_session['access_token']
     del login_session['gplus_id']
     del login_session['username']

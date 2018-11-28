@@ -1,24 +1,24 @@
 #!/usr/bin/env python
 
-from flask import Flask, jsonify, render_template, request
-from flask import flash, make_response, redirect, url_for
-from flask import session as login_session
+import datetime
+import json
+import os
+import random
+import string
+
+import httplib2
+import requests
+from flask import Flask, jsonify, render_template, request, flash, make_response, redirect, url_for, \
+    session as login_session
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect, CSRFError
-from model import Category, Item, User, db
-from validation import isUserLoggedIn, isItemFormValid
-from validation import isItemRepeated, allowed_file
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 from werkzeug.utils import secure_filename
-import os
+
 import crud
-import json
-import string
-import random
-import requests
-import datetime
-import httplib2
 import user_helper
+from model import Category, Item
+from validation import is_user_logged_in, is_item_form_valid, is_item_repeated, allowed_file
 
 # Protect application from third party attack
 csrf = CSRFProtect()
@@ -47,7 +47,7 @@ FORBIDDEN_ERROR_MSG = 'Service for authenticated users only.'
 
 # Create anti-forgery state token
 @app.route('/login')
-def showLogin():
+def show_login():
     state = ''.join(
         random.choice(string.ascii_uppercase + string.digits)
         for x in range(32))
@@ -123,9 +123,9 @@ def gconnect():
         login_session['gplus_id'] = gplus_id
 
         # see if user exists, if it doesn't make a new one
-        user_id = user_helper.getUserID(login_session['email'])
+        user_id = user_helper.get_user_id(login_session['email'])
         if not user_id:
-            user_id = user_helper.createUser(login_session)
+            user_id = user_helper.create_user(login_session)
         login_session['user_id'] = user_id
 
         # Get user info
@@ -148,9 +148,9 @@ def gconnect():
 
     try:
         # see if user exists, if it doesn't make a new one
-        user_id = user_helper.getUserID(login_session['email'])
+        user_id = user_helper.get_user_id(login_session['email'])
         if not user_id:
-            user_id = user_helper.createUser(login_session)
+            user_id = user_helper.create_user(login_session)
         login_session['user_id'] = user_id
     except Exception:
         pass
@@ -167,9 +167,9 @@ def gconnect():
     login_session['email'] = data['email']
     login_session['gplus'] = data['link']
 
-    userID = user_helper.getUserID(login_session['email'])
-    if not userID:
-        user_helper.createUser(login_session)
+    user_id = user_helper.get_user_id(login_session['email'])
+    if not user_id:
+        user_helper.create_user(login_session)
 
     output = ''
     output += '<h1>Welcome, '
@@ -200,7 +200,7 @@ def gdisconnect():
     result = h.request(url, 'GET')[0]
     if result['status'] == '200':
         # Reset the user's sesson.
-        user_helper.delLoginSession(login_session)
+        user_helper.delete_login_session(login_session)
 
         # response = make_response(
         #   json.dumps('Successfully disconnected.'), 200)
@@ -208,11 +208,11 @@ def gdisconnect():
         return redirect('/')  # , response
     else:
         # Reset the user's sesson.
-        user_helper.delLoginSession(login_session)
+        user_helper.delete_login_session(login_session)
 
         # For whatever reason, the given token was invalid.
         response = make_response(
-            json.dumps('Failed to revoke token for given user.', 400))
+            json.dumps('Failed to revoke token for given user.'))
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -220,8 +220,8 @@ def gdisconnect():
 # Main screen
 @app.route('/')
 def main():
-    cats = crud.allCategories()
-    latest_items = crud.latestItem()
+    cats = crud.all_categories()
+    latest_items = crud.latest_item()
     return render_template(
         'catalog.html',
         categories=cats,
@@ -232,9 +232,9 @@ def main():
 
 # Get all Items by a selected Category
 @app.route('/catalog/<string:category_name>/items')
-def getItemsByCategory(category_name):
-    cats = crud.allCategories()
-    items_by_category = crud.itemsByCategory(category_name)
+def get_items_by_category(category_name):
+    cats = crud.all_categories()
+    items_by_category = crud.items_by_category(category_name)
     return render_template(
         'catalog.html',
         categories=cats,
@@ -245,8 +245,8 @@ def getItemsByCategory(category_name):
 
 # Get the selected item description
 @app.route('/catalog/<string:category_name>/<string:item_title>')
-def getItem(category_name, item_title):
-    cats = crud.allCategories()
+def get_item(category_name, item_title):
+    cats = crud.all_categories()
     item = crud.item(category_name, item_title)
     return render_template(
         'item.html', categories=cats, item=item, login_session=login_session)
@@ -254,15 +254,15 @@ def getItem(category_name, item_title):
 
 # Add Category
 @app.route('/category/new', methods=['GET', 'POST'])
-def newCategory():
+def new_category():
     if 'username' not in login_session:
         app.logger.error(FORBIDDEN_ERROR_MSG)
         return render_template('forbidden.html')
     if request.method == 'POST':
-        user = user_helper.getUserByEmail(login_session['email'])
-        newCategory = Category(name=request.form['name'], user=user)
-        crud.newCategory(newCategory)
-        flash(u'%s Successfully Created' % newCategory.name, 'success')
+        user = user_helper.get_user_by_email(login_session['email'])
+        new_category = Category(name=request.form['name'], user=user)
+        crud.new_category(new_category)
+        flash(u'%s Successfully Created' % new_category.name, 'success')
         return redirect(url_for('main'))
     else:
         return render_template(
@@ -271,7 +271,7 @@ def newCategory():
 
 # Edit Category
 @app.route('/category/<string:category_id>/edit', methods=['GET', 'POST'])
-def editCategory(category_id):
+def edit_category(category_id):
     if 'username' not in login_session:
         app.logger.error(FORBIDDEN_ERROR_MSG)
         return render_template('forbidden.html')
@@ -279,7 +279,7 @@ def editCategory(category_id):
     if request.method == 'POST':
         name = request.form['name']
         if name:
-            crud.editCategory(category_id, name)
+            crud.edit_category(category_id, name)
             flash(u'\"%s\" Successfully Edited' % name, 'success')
     else:
         cat = crud.category(category_id)
@@ -291,12 +291,12 @@ def editCategory(category_id):
 
 # Delete Category
 @app.route('/category/<string:cat_id>/delete')
-def deleteCategory(cat_id):
+def delete_category(cat_id):
     if 'username' not in login_session:
         app.logger.error(FORBIDDEN_ERROR_MSG)
         return render_template('forbidden.html')
 
-    crud.deleteCategory(cat_id)
+    crud.delete_category(cat_id)
 
     app.logger.info('category %s deleted.' % cat_id)
     flash(u'Category Successfully Deleted', 'success')
@@ -306,16 +306,16 @@ def deleteCategory(cat_id):
 
 # Add Item
 @app.route('/item/new', methods=['GET', 'POST'])
-def newItem():
-    if not isUserLoggedIn(login_session):
+def new_item():
+    if not is_user_logged_in(login_session):
         app.logger.error(FORBIDDEN_ERROR_MSG)
         return render_template('forbidden.html')
 
     if request.method == 'POST':
 
-        cats = crud.allCategories()
+        cats = crud.all_categories()
 
-        if not isItemFormValid(request.form):
+        if not is_item_form_valid(request.form):
             flash(u'Item title and category are both mandatory', 'error')
             return render_template(
                 'new_item.html', categories=cats, login_session=login_session)
@@ -323,8 +323,8 @@ def newItem():
         item_title = request.form['title']
         cat_id = request.form['category']
 
-        if isItemRepeated(category_id=cat_id, item_title=item_title):
-            cat_name = crud.categoryNameById(cat_id)
+        if is_item_repeated(category_id=cat_id, item_title=item_title):
+            cat_name = crud.category_name_by_id(cat_id)
             flash(
                 u'There is an item called %s in category %s' %
                 (item_title, cat_name), 'error')
@@ -335,47 +335,54 @@ def newItem():
         picture_path = secure_filename(item_title) + "_"
         try:
             picture = request.files['picture']
+            print('vai chamar agora o allowed_file')
             if picture and allowed_file(picture.filename):
+                print("entrou.. droga..")
                 picture_path = picture_path + secure_filename(picture.filename)
                 picture.save(os.path.join(UPLOAD_FOLDER, picture_path))
+            else:
+                flash(u"Images can be only 'png', 'jpg', 'jpeg' or 'gif'.", 'error')
+                picture_path = ''
+                return redirect(url_for('new_item'))
         except Exception:
             pass
 
         email = login_session['email']
-        user = user_helper.getUserByEmail(email=email)
-        newItem = Item(
+        user = user_helper.get_user_by_email(email=email)
+        new_item = Item(
             title=request.form['title'],
             description=request.form['description'],
             cat_id=request.form['category'],
             picture_path=picture_path,
             user=user)
 
-        crud.newItem(newItem)
+        crud.new_item(new_item)
 
-        app.logger.info('Item %s created.' % newItem.title)
-        flash(u'\"%s\" Successfully Created' % newItem.title, 'success')
+        app.logger.info('Item %s created.' % new_item.title)
+        flash(u'\"%s\" Successfully Created' % new_item.title, 'success')
 
         return redirect(
-            url_for('getItemsByCategory', category_name=newItem.category.name))
+            url_for('get_items_by_category',
+                    category_name=new_item.category.name))
     else:
-        cats = crud.allCategories()
+        cats = crud.all_categories()
         return render_template(
             'new_item.html', categories=cats, login_session=login_session)
 
 
 # Delete Item
 @app.route('/item/<string:item_id>/delete', methods=['GET', 'POST'])
-def deleteItem(item_id):
+def delete_item(item_id):
     if 'username' not in login_session:
         app.logger.error(FORBIDDEN_ERROR_MSG)
         return render_template('forbidden.html', error=FORBIDDEN_ERROR_MSG)
 
-    item = crud.itemById(item_id)
+    item = crud.item_by_id(item_id)
     cat_name = item.category.name
-    user_id = user_helper.getUserID(login_session['email'])
-    user = user_helper.getUserInfo(user_id)
+    user_id = user_helper.get_user_id(login_session['email'])
+    user = user_helper.get_user_info(user_id)
     if user.email == item.user.email:
-        crud.deleteItem(item_id)
+        crud.delete_item(item_id)
     else:
         error = 'You can delete only items that you created!'
         return render_template('forbidden.html', error=error)
@@ -383,27 +390,27 @@ def deleteItem(item_id):
     app.logger.info('Item %s deleted' % item_id)
     flash(u'Item Successfully Deleted', 'success')
 
-    return redirect(url_for('getItemsByCategory', category_name=cat_name))
+    return redirect(url_for('get_items_by_category', category_name=cat_name))
 
 
 # Edit Item
 @app.route('/item/<string:item_id>/edit', methods=['GET', 'POST'])
-def editItem(item_id):
+def edit_item(item_id):
     if 'username' not in login_session:
         app.logger.error(FORBIDDEN_ERROR_MSG)
         return render_template('forbidden.html', error=FORBIDDEN_ERROR_MSG)
 
-    cats = crud.allCategories()
-    itemToBeEdited = crud.itemById(item_id)
+    cats = crud.all_categories()
+    item_to_be_edited = crud.item_by_id(item_id)
 
     if request.method == 'POST':
         title = request.form['title']
         description = request.form['description']
         cat_id = request.form['category']
 
-        if itemToBeEdited.title != title:
-            if isItemRepeated(category_id=cat_id, item_title=title):
-                cat_name = crud.categoryNameById(cat_id)
+        if item_to_be_edited.title != title:
+            if is_item_repeated(category_id=cat_id, item_title=title):
+                cat_name = crud.category_name_by_id(cat_id)
                 flash(
                     u'There is an item called %s in category %s' %
                     (title, cat_name), 'error')
@@ -413,7 +420,7 @@ def editItem(item_id):
                     categories=cats,
                     login_session=login_session)
 
-        picture_path = itemToBeEdited.picture_path
+        picture_path = item_to_be_edited.picture_path
         try:
             picture = request.files['picture']
             if picture and allowed_file(picture.filename):
@@ -421,7 +428,7 @@ def editItem(item_id):
                     # in case there isn't a pic before, it raises an excpetion
                     os.remove(
                         os.path.join(UPLOAD_FOLDER,
-                                     itemToBeEdited.picture_path))
+                                     item_to_be_edited.picture_path))
                 finally:
                     picture_path = "%s_%s" % (secure_filename(title),
                                               secure_filename(
@@ -430,10 +437,10 @@ def editItem(item_id):
         except Exception:
             pass
 
-        user_id = user_helper.getUserID(login_session['email'])
-        user = user_helper.getUserInfo(user_id)
-        if user.email == itemToBeEdited.user.email:
-            crud.editItem(item_id, title, description, picture_path, cat_id)
+        user_id = user_helper.get_user_id(login_session['email'])
+        user = user_helper.get_user_info(user_id)
+        if user.email == item_to_be_edited.user.email:
+            crud.edit_item(item_id, title, description, picture_path, cat_id)
         else:
             error = 'You can edit only items the you created!'
             return render_template('forbidden.html', error=error)
@@ -442,7 +449,7 @@ def editItem(item_id):
     else:
         return render_template(
             'new_item.html',
-            item=itemToBeEdited,
+            item=item_to_be_edited,
             categories=cats,
             login_session=login_session)
 
@@ -457,9 +464,9 @@ def profile():
 
 # JSON APIs to view Catalog Information
 @app.route('/catalog.json')
-def catalogJSON():
-    categories = crud.allCategories()
-    items = crud.allItems()
+def catalog_json():
+    categories = crud.all_categories()
+    items = crud.all_items()
     catalog = {"Category": [cat.serialize for cat in categories]}
     for cat in catalog["Category"]:
         cat["item"] = [
@@ -488,7 +495,7 @@ def handle_csrf_error(e):
 if __name__ == '__main__':
     app.secret_key = '_ROZOjB0Ph1aBQrSS_n1gD58'
     app.wtf_csrf_secret_key = 'aj@2lL!OA0NU'
-    app.debug = False
+    app.debug = True
     app.logger.info('Item Catalog App started at %s' % datetime.datetime.now())
-    app.run(port=80)
+    app.run(host="localhost", port=8000)
     app.logger.info('Item Catalog App stopped at %s' % datetime.datetime.now())

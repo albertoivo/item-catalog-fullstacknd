@@ -9,7 +9,7 @@
 
 
 This is a project for Udacity Course Nanodegree Full Stack Web Developer. It's a catalog of products categorized by categories. Any authenticated user can add items in the app. But only the owner can delete or edit the item.
-For this project I developed with Python, Flask and SQLAlchemy in the backend. SQLite for the data persistence and pure HTML/CSS/JS for the frontend.
+For this project I developed with Python 3, Flask and SQLAlchemy in the backend. SQLite for the data persistence and pure HTML/CSS/JS for the frontend.
 
 ## Table of contents
 
@@ -22,7 +22,8 @@ For this project I developed with Python, Flask and SQLAlchemy in the backend. S
 
 ## Requirements
 
--   Please read the [requirements file](requirements.txt) file for for more information or run the following command:
+-   Python 3
+-   Please read the [requirements file](./requirements.txt) file for more information and run the following command:
  -   `pip install -r requirements.txt`
 -   If you do not have `pip`, please install it by running the following commands:
  -   `curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py`
@@ -30,18 +31,17 @@ For this project I developed with Python, Flask and SQLAlchemy in the backend. S
 
 ## Quick start
 
-1. Fork it
-2. Clone it
-3. `cd item-catalog-fullstacknd`
-4. `python project.py`
+1. Clone it
+1. `cd item-catalog-fullstacknd/itemCatalogApp`
+1. `python __init__.py`
 
 ## Developed with
 
-* [Python](https://www.python.org/)
+* [Python 3](https://www.python.org/)
 * [Flask](http://flask.pocoo.org/)
 * [SQLAlchemy](http://www.sqlalchemy.org/)
-* [Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org/2.3/)
-* [SQLite](https://www.sqlite.org)
+* [Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org/)
+* [SQLite](https://www.sqlite.org/)
 
 ## Contributing
 

@@ -1,18 +1,18 @@
-from model import Category, Item, User, db
+from model import Category, Item
 
 
 # check if user is logged in
-def isUserLoggedIn(login_session):
+def is_user_logged_in(login_session):
     return 'username' in login_session
 
 
 # validate the item form
-def isItemFormValid(form):
+def is_item_form_valid(form):
     return form['title'] and form['category']
 
 
 # check if the item is repeated
-def isItemRepeated(category_id, item_title):
+def is_item_repeated(category_id, item_title):
     cat = Category.query.filter_by(id=category_id).first()
     item = Item.query.filter_by(title=item_title, category=cat).first()
     return True if item else False
@@ -20,6 +20,6 @@ def isItemRepeated(category_id, item_title):
 
 # Check if the picture is have an allowed extension
 def allowed_file(filename):
-    ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
+    print(filename.rsplit('.', 1)[1].lower() in allowed_extensions)
+    return filename.rsplit('.', 1)[1].lower() in allowed_extensions
