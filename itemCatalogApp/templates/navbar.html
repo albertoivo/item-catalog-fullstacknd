@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <nav>
   <!-- Navbar on BIG screens -->
   <div class="bar">
@@ -9,7 +10,7 @@
         <a class="hide-mobile hover-red right" href="{{ url_for('show_login') }}">Login</a>
     {% else %}
     <a id="logout" class="hide-mobile hover-red right" href='/logout'>(Logout)</a>
-    <img src="{{ login_session['picture'] }}" class="hide-mobile right navbar_pic" />
+      <img src="{{ login_session['picture'] }}" alt="user" class="hide-mobile right navbar_pic" />
     <a href="/profile" class="hide-mobile right">Welcome, {{ login_session['username'] }}</a>
     <a href="/category/new" class="hide-mobile hover-green">Add Category</a>
     <a href="/item/new" class="hide-mobile hover-green">Add Item</a>
@@ -22,7 +23,7 @@
         <a href="{{ url_for('show_login') }}" class="bar-item button hover-red">Login</a> {% else %}
     <div class="welcome">
       <a href="/profile">Welcome, {{ login_session['username'] }}</a>
-      <img src="{{ login_session['picture'] }}" class="navbar_pic" />
+      <img src="{{ login_session['picture'] }}" alt="user" class="navbar_pic" />
     </div>
     <a href="/category/new" class="bar-item button hover-green">Add Category</a>
     <a href="/item/new" class="bar-item button hover-green">Add Item</a>
