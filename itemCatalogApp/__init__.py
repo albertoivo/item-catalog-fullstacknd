@@ -335,15 +335,13 @@ def new_item():
         picture_path = secure_filename(item_title) + "_"
         try:
             picture = request.files['picture']
-            print('vai chamar agora o allowed_file')
             if picture and allowed_file(picture.filename):
-                print("entrou.. droga..")
                 picture_path = picture_path + secure_filename(picture.filename)
                 picture.save(os.path.join(UPLOAD_FOLDER, picture_path))
             else:
                 flash(u"Images can be only 'png', 'jpg', 'jpeg' or 'gif'.", 'error')
                 picture_path = ''
-                return redirect(url_for('new_item'))
+                # return redirect(url_for('new_item'))
         except Exception:
             pass
 
