@@ -339,7 +339,9 @@ def new_item():
                 picture_path = picture_path + secure_filename(picture.filename)
                 picture.save(os.path.join(UPLOAD_FOLDER, picture_path))
             else:
-                flash(u"Images can be only 'png', 'jpg', 'jpeg' or 'gif'.", 'error')
+                flash(
+                    u"Images can be only 'png', 'jpg', 'jpeg' or 'gif'.",
+                    'error')
                 picture_path = ''
                 # return redirect(url_for('new_item'))
         except Exception:

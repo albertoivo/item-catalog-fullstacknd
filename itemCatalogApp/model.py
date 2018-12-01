@@ -1,6 +1,7 @@
+from datetime import datetime
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -10,6 +11,8 @@ db = SQLAlchemy(app)
 
 
 class User(db.Model):
+  """User table"""
+
     __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -30,6 +33,8 @@ class User(db.Model):
 
 
 class Category(db.Model):
+  """Category table"""
+
     __tablename__ = 'category'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -49,17 +54,23 @@ class Category(db.Model):
 
 
 class Item(db.Model):
+  """Item table"""
+
     __tablename__ = 'item'
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(250), nullable=False)
     description = db.Column(db.String(250))
     picture_path = db.Column(db.String)
-    created = db.Column(db.DateTime, nullable=False,
-                        default=datetime.utcnow, onupdate=datetime.utcnow)
+  created = db.Column(
+    db.DateTime,
+    nullable=False,
+    default=datetime.utcnow,
+    onupdate=datetime.utcnow)
     cat_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     category = db.relationship(
-        Category, backref=db.backref("Item", cascade="all,delete"))
+      Category, backref=db.backref(
+        "Item", cascade="all,delete"))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship(User)
 
