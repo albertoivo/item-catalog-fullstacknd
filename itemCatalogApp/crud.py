@@ -78,7 +78,10 @@ def new_item(new_item):
 def delete_item(item_id):
     item = item_by_id(item_id)
     if item.picture_path:
+      try:
         os.remove(os.path.join(UPLOAD_FOLDER, item.picture_path))
+      except FileNotFoundError:
+        pass
     db.session.delete(item)
     db.session.commit()
 

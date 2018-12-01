@@ -63,6 +63,6 @@ input[type="submit"]:hover {
   .col-75,
   input[type="submit"] {
     width: 100%;
-    margin-top: 10;
+      margin-top: 10px;
   }
 }
