@@ -9,7 +9,7 @@ import string
 import httplib2
 import requests
 from flask import Flask, jsonify, render_template, request, flash, make_response, redirect, url_for, \
-    session as login_session
+  session as login_session
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
@@ -40,7 +40,7 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
 
 csrf.init_app(app)
 
-db = SQLAlchemy(app)
+SQLAlchemy(app)
 
 FORBIDDEN_ERROR_MSG = 'Service for authenticated users only.'
 
@@ -497,5 +497,5 @@ if __name__ == '__main__':
     app.wtf_csrf_secret_key = 'aj@2lL!OA0NU'
     app.debug = True
     app.logger.info('Item Catalog App started at %s' % datetime.datetime.now())
-    app.run(host="localhost", port=8000)
+    app.run(host="localhost")
     app.logger.info('Item Catalog App stopped at %s' % datetime.datetime.now())

@@ -90,5 +90,4 @@ def edit_item(item_id, title, description, picture_path, cat_id):
     item.description = description
     item.picture_path = picture_path
     item.cat_id = cat_id
-
     db.session.commit()

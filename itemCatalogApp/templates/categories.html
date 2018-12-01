@@ -11,7 +11,7 @@
         <a href="{{ url_for('get_items_by_category', category_name=cat.name) }}" class="item-title">{{ cat.name }}</a>
     <div id="actions">
         <a href="{{ url_for('delete_category', cat_id=cat.id) }}"
-           onclick="return confirm('Are you sure you want delete the category \'{{ cat.title }}\'?')">
+           onclick="return confirm('All itens will be removed if you remove this category. Continue?')">
         <i class="fa fa-trash-o"></i>
       </a>
         <a href="{{ url_for('edit_category', category_id=cat.id) }}">
