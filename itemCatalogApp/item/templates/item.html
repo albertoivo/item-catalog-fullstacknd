@@ -10,7 +10,7 @@
   <h3 class="item-description">{{ item.description }}</h3>
 
   {% if item.picture_path %}
-    <img src="/static/img/items/{{ item.picture_path }}" alt="item" /> {% endif %} {% else %}
+    <img src="{{ item.picture_path }}" alt="item" /> {% endif %} {% else %}
   <h3 class="item-description">No items in this category with this name.</h3>
   {% endif %} {% if 'username' in login_session and login_session['email'] == item.user.email %}
     <div id="actions" style="text-align: right; margin: 0 50px 10px 0">

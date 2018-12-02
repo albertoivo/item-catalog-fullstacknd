@@ -1,9 +1,4 @@
-import os
-
 from model import Category, Item, db
-
-APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/img/items')
 
 
 # find all categories
@@ -77,11 +72,6 @@ def new_item(new_item):
 # delete the item
 def delete_item(item_id):
     item = item_by_id(item_id)
-    if item.picture_path:
-        try:
-            os.remove(os.path.join(UPLOAD_FOLDER, item.picture_path))
-        except FileNotFoundError:
-            pass
     db.session.delete(item)
     db.session.commit()
 

@@ -32,8 +32,10 @@
           <label for="picture">Picture</label>
         </div>
         <div class="col-75">
-          <input type="file" id="picture" name="picture"> {% if item and item.picture_path %}
-          <img src="/static/img/items/{{ item.picture_path }}" alt="item" /> {% endif %}
+          <input type="url" id="picture" name="picture">
+          {% if item and item.picture_path %}
+            <img src="{{ item.picture_path }}" alt="item" />
+          {% endif %}
         </div>
       </div>
 

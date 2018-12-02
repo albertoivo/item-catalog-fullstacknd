@@ -1,17 +1,12 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, \
     session as login_session
 import crud
-import os
 import user_helper
-from werkzeug.utils import secure_filename
 import constants
 from model import Item
-from validation import is_user_logged_in, is_item_form_valid, is_item_repeated, allowed_file
+from validation import is_user_logged_in, is_item_form_valid, is_item_repeated
 
 item = Blueprint('item', __name__, template_folder='templates')
-
-APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/img/items')
 
 
 # Get all Items by a selected Category
@@ -63,28 +58,13 @@ def new_item():
             return render_template(
                 'new_item.html', categories=cats, login_session=login_session)
 
-        picture_path = secure_filename(item_title) + "_"
-        try:
-            picture = request.files['picture']
-            if picture and allowed_file(picture.filename):
-                picture_path = picture_path + secure_filename(picture.filename)
-                picture.save(os.path.join(UPLOAD_FOLDER, picture_path))
-            else:
-                flash(
-                    u"Images can be only 'png', 'jpg', 'jpeg' or 'gif'.",
-                    'error')
-                picture_path = ''
-                # return redirect(url_for('new_item'))
-        except Exception:
-            pass
-
         email = login_session['email']
         user = user_helper.get_user_by_email(email=email)
         new_item = Item(
             title=request.form['title'],
             description=request.form['description'],
             cat_id=request.form['category'],
-            picture_path=picture_path,
+            picture_path=request.form['picture'],
             user=user)
 
         crud.new_item(new_item)
@@ -139,6 +119,7 @@ def edit_item(item_id):
 
     if request.method == 'POST':
         title = request.form['title']
+        picture_path = request.form['picture']
         description = request.form['description']
         cat_id = request.form['category']
 
@@ -154,30 +135,12 @@ def edit_item(item_id):
                     categories=cats,
                     login_session=login_session)
 
-        picture_path = item_to_be_edited.picture_path
-        try:
-            picture = request.files['picture']
-            if picture and allowed_file(picture.filename):
-                try:
-                    # in case there isn't a pic before, it raises an excpetion
-                    os.remove(
-                        os.path.join(UPLOAD_FOLDER,
-                                     item_to_be_edited.picture_path))
-                finally:
-                    picture_path = "%s_%s" % (secure_filename(title),
-                                              secure_filename(
-                                                  picture.filename))
-                    picture.save(os.path.join(UPLOAD_FOLDER, picture_path))
-        except Exception:
-            pass
-
         user_id = user_helper.get_user_id(login_session['email'])
         user = user_helper.get_user_info(user_id)
         if user.email == item_to_be_edited.user.email:
             crud.edit_item(item_id, title, description, picture_path, cat_id)
         else:
-            error = 'You can edit only items the you created!'
-            return render_template('forbidden.html', error=error)
+            return render_template('forbidden.html', error=constants.AUTH_ERROR_EDIT_ITEM)
 
         flash(u'Item Successfully Edited', 'success')
     else:
