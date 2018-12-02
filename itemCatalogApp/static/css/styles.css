@@ -1,6 +1,6 @@
 :root {
-  --main-bgcolor: black;
-  --main-ftcolor: white;
+  --black-color: black;
+  --white-color: white;
   --card-color: #ffeead;
 }
 
@@ -12,9 +12,9 @@ body {
 }
 
 .container {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
@@ -30,7 +30,7 @@ nav {
 
 footer {
   text-align: center;
-  background-color: var(--main-bgcolor);
+  background-color: var(--black-color);
   padding: 16px;
   right: 0;
   bottom: 0;
@@ -38,7 +38,7 @@ footer {
 }
 
 footer p {
-  color: var(--main-ftcolor);
+  color: var(--white-color);
 }
 
 .logo {
@@ -49,13 +49,13 @@ footer p {
 .bar {
   width: 100%;
   overflow: hidden;
-  background-color: var(--main-bgcolor);
-  color: var(--main-ftcolor);
+  background-color: var(--black-color);
+  color: var(--white-color);
 }
 
 a {
   text-decoration: none;
-  color: var(--main-ftcolor);
+  color: var(--white-color);
 }
 
 .bar>a {
@@ -88,8 +88,8 @@ a {
 }
 
 .menu-mobile {
-  background-color: var(--main-bgcolor);
-  color: var(--main-ftcolor);
+  background-color: var(--black-color);
+  color: var(--white-color);
   display: none;
   top: 0;
   position: fixed;
@@ -101,12 +101,12 @@ a {
  }
 
 .hover-red:hover {
-  color: #fff !important;
+  color: var(--white-color) !important;
   background-color: #f44336 !important;
 }
 
 .hover-green:hover {
-  color: #fff !important;
+  color: var(--white-color) !important;
   background-color: #47a147 !important;
 }
 
@@ -161,20 +161,20 @@ h1 {
   font-size: 36px;
   font-weight: bolder;
   margin-left: 10px;
-  color: var(--main-bgcolor);
+  color: var(--black-color);
 }
 
 .item-title {
   font-weight: bolder;
   margin-left: 20px;
-  color: var(--main-bgcolor);
+  color: var(--black-color);
   float: left;
 }
 
 .item-title-unlogged {
   font-weight: bolder;
   margin-left: 20px;
-  color: var(--main-bgcolor);
+  color: var(--black-color);
 }
 
 .item-category {
@@ -208,7 +208,7 @@ h1 {
   background-color: #d4edda;
   color: #155724;
   width: 100%;
-    line-height: 0;
+  line-height: 0;
   border-color: #c3e6cb;
 }
 
@@ -226,7 +226,7 @@ h1 {
   background-color: #cce5ff;
   color: #004085;
   width: 100%;
-    line-height: 0;
+  line-height: 0;
   border-color: #b8daff;
 }
 
@@ -235,7 +235,7 @@ h1 {
   outline: 0;
   display: inline-block;
   padding: 8px;
-  color: white;
+  color: var(--white-color);
   background-color: #000;
   text-align: center;
   cursor: pointer;
