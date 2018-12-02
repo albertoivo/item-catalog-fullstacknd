@@ -140,7 +140,9 @@ def edit_item(item_id):
         if user.email == item_to_be_edited.user.email:
             crud.edit_item(item_id, title, description, picture_path, cat_id)
         else:
-            return render_template('forbidden.html', error=constants.AUTH_ERROR_EDIT_ITEM)
+            return render_template(
+                'forbidden.html',
+                error=constants.AUTH_ERROR_EDIT_ITEM)
 
         flash(u'Item Successfully Edited', 'success')
     else:
