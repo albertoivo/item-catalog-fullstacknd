@@ -22,19 +22,21 @@
         </div>
         <div class="col-75">
           {% if item %}
-          <textarea id="description" name="description" style="height:200px">{{ item.description }}</textarea> {% else %}
-          <textarea id="description" name="description" placeholder="Description" style="height:200px"></textarea> {% endif %}
+            <textarea id="description" name="description" style="height:200px">{{ item.description }}</textarea>
+          {% else %}
+            <textarea id="description" name="description" placeholder="Description" style="height:200px"></textarea>
+          {% endif %}
         </div>
       </div>
 
       <div class="row">
         <div class="col-25">
-          <label for="picture">Picture</label>
+          <label for="picture">Image URL</label>
         </div>
         <div class="col-75">
-          <input type="url" id="picture" name="picture">
+          <input type="url" id="picture" name="picture" placeholder="Image url. Ex.: http://example.com/image.jpg"/>
           {% if item and item.picture_path %}
-            <img src="{{ item.picture_path }}" alt="item" />
+            <img src="{{ item.picture_path }}" style="margin-top: 10px" alt="item"  />
           {% endif %}
         </div>
       </div>

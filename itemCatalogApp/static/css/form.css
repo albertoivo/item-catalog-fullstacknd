@@ -1,15 +1,11 @@
 input[type="text"],
-select,
+input[type="url"],
 textarea {
-  width: 90%;
+  width: 94%;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   resize: vertical;
-}
-
-select {
-  width: 95%;
 }
 
 label {
@@ -33,7 +29,7 @@ input[type="submit"]:hover {
 }
 
 .form {
-    background-color: #87c489;
+  background-color: #87c489;
   border-radius: 5px;
   padding: 20px;
 }
