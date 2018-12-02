@@ -8,18 +8,18 @@
   {% for cat in categories %}
   <p>
     {% if 'username' in login_session and login_session['email'] == cat.user.email %}
-        <a href="{{ url_for('get_items_by_category', category_name=cat.name) }}" class="item-title">{{ cat.name }}</a>
+        <a href="{{ url_for('item.get_items_by_category', category_name=cat.name) }}" class="item-title">{{ cat.name }}</a>
     <div id="actions">
-        <a href="{{ url_for('delete_category', cat_id=cat.id) }}"
+        <a href="{{ url_for('category.delete_category', cat_id=cat.id) }}"
            onclick="return confirm('All itens will be removed if you remove this category. Continue?')">
         <i class="fa fa-trash-o"></i>
       </a>
-        <a href="{{ url_for('edit_category', category_id=cat.id) }}">
+        <a href="{{ url_for('category.edit_category', category_id=cat.id) }}">
         <i class="fa fa-pencil"></i>
       </a>
     </div>
     {% else %}
-        <a href="{{ url_for('get_items_by_category', category_name=cat.name) }}"
+        <a href="{{ url_for('item.get_items_by_category', category_name=cat.name) }}"
            class="item-title-unlogged">{{ cat.name }}</a> {% endif %}
   </p>
   {% endfor %}

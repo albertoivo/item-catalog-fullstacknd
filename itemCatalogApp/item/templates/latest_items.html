@@ -4,7 +4,7 @@
   </p>
   {% for item in items %}
   <p>
-      <a href="{{ url_for('get_item', category_name=item.category.name, item_title=item.title) }}"
+      <a href="{{ url_for('item.get_item', category_name=item.category.name, item_title=item.title) }}"
          class="item-title">{{ item.title }}</a>
     <a class="item-category"> ({{item.category.name }}) </a>
   </p>

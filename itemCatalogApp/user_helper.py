@@ -1,5 +1,4 @@
 from sqlalchemy.orm.exc import MultipleResultsFound
-
 from model import User, db
 
 
