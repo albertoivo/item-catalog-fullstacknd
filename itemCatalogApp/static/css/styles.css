@@ -31,11 +31,11 @@ nav {
 footer {
   text-align: center;
   background-color: var(--main-bgcolor);
-    color: var(--main-ftcolor);
   padding: 16px;
-  clear: both;
-  position: relative;
-  z-index: 10;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 
 footer p {
@@ -96,6 +96,10 @@ a {
   position: fixed;
   width: 100%;
 }
+
+.show {
+   display: block !important;
+ }
 
 .hover-red:hover {
   color: #fff !important;

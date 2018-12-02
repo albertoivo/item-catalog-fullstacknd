@@ -1,9 +1,9 @@
 // Used to toggle the menu on small screens when clicking on the menu button
 function toggleMenu() {
-  let x = document.getElementById('bar-mobile')
-  if (x.className.indexOf('show') === -1) {
-        x.className += ' show'
+  let menu_mobile = document.getElementById('bar-mobile')
+  if (menu_mobile.className.indexOf('show') === -1) {
+        menu_mobile.className += ' show'
     } else {
-        x.className = x.className.replace(' show', '')
+        menu_mobile.className = menu_mobile.className.replace(' show', '')
     }
 }
