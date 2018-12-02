@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, \
-  session as login_session
+    session as login_session
 import crud
 import os
 import user_helper
@@ -104,7 +104,9 @@ def new_item():
 @item.route('/item/<string:item_id>/delete', methods=['GET', 'POST'])
 def delete_item(item_id):
     if 'username' not in login_session:
-        return render_template('forbidden.html', error=constants.FORBIDDEN_ERROR_MSG)
+        return render_template(
+            'forbidden.html',
+            error=constants.FORBIDDEN_ERROR_MSG)
 
     item = crud.item_by_id(item_id)
     cat_name = item.category.name
@@ -118,14 +120,19 @@ def delete_item(item_id):
 
     flash(u'Item Successfully Deleted', 'success')
 
-    return redirect(url_for('item.get_items_by_category', category_name=cat_name))
+    return redirect(
+        url_for(
+            'item.get_items_by_category',
+            category_name=cat_name))
 
 
 # Edit Item
 @item.route('/item/<string:item_id>/edit', methods=['GET', 'POST'])
 def edit_item(item_id):
     if 'username' not in login_session:
-        return render_template('forbidden.html', error=constants.FORBIDDEN_ERROR_MSG)
+        return render_template(
+            'forbidden.html',
+            error=constants.FORBIDDEN_ERROR_MSG)
 
     cats = crud.all_categories()
     item_to_be_edited = crud.item_by_id(item_id)

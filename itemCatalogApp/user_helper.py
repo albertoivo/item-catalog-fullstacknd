@@ -4,10 +4,11 @@ from model import User, db
 
 def create_user(login_session):
     new_user = User(name=login_session['username'], email=login_session[
-                   'email'], picture=login_session['picture'])
+        'email'], picture=login_session['picture'])
     db.session.add(new_user)
     db.session.commit()
-    user = db.session.query(User).filter_by(email=login_session['email']).one_or_none()
+    user = db.session.query(User).filter_by(
+        email=login_session['email']).one_or_none()
     return user.id
 
 
