@@ -14,13 +14,15 @@
       <a href="/profile" class="hide-mobile right">Welcome, {{ login_session['username'] }}</a>
       <a href="/category/new" class="hide-mobile hover-green">Add Category</a>
       <a href="/item/new" class="hide-mobile hover-green">Add Item</a>
-      <a href="/catalog.json" class="hide-mobile hover-green">JSON</a>
-      <a href="/api/help" class="hide-mobile hover-green">API Help</a>
     {% endif %}
+    <a href="/catalog.json" class="hide-mobile hover-green">JSON</a>
+    <a href="/api/help" class="hide-mobile hover-green">API Help</a>
   </div>
 
   <!-- Navbar on SMALL screens -->
   <div id="bar-mobile" class="bar-block hide-desktop menu-mobile" style="margin-top:46px ">
+    <a href="/catalog.json" class="bar-item button hover-green">JSON</a>
+    <a href="/api/help" class="bar-item button hover-green">API Help</a>
     {% if 'username' not in login_session %}
       <a href="{{ url_for('show_login') }}" class="bar-item button hover-red">Login</a> {% else %}
       <div class="welcome">
@@ -29,8 +31,7 @@
       </div>
       <a href="/category/new" class="bar-item button hover-green">Add Category</a>
       <a href="/item/new" class="bar-item button hover-green">Add Item</a>
-      <a href="/catalog.json" class="bar-item button hover-green">JSON</a>
-      <a href="/api/help" class="bar-item button hover-green">API Help</a>
-      <a class="bar-item button hover-red" href='/logout'>Logout</a> {% endif %}
+      <a class="bar-item button hover-red" href='/logout'>Logout</a>
+    {% endif %}
   </div>
 </nav>
