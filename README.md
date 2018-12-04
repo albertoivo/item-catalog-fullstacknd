@@ -33,7 +33,7 @@ For this project I developed with Python 3, Flask and SQLAlchemy in the backend.
 
 1. Clone it
 1. `cd item-catalog-fullstacknd/itemCatalogApp`
-1. `python __init__.py`
+1. `python main.py`
 
 ## Developed with
 
