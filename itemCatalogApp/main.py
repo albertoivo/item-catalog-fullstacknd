@@ -17,11 +17,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///itemcatalog.db'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
 
+SQLAlchemy(app)
+
+# Blueprints register
 app.register_blueprint(google)
 app.register_blueprint(category)
 app.register_blueprint(item)
-
-SQLAlchemy(app)
 
 # Protect application from third party attack
 csrf.init_app(app)
@@ -40,8 +41,19 @@ def main():
         login_session=login_session)
 
 
+@app.route('/api/help', methods = ['GET'])
+def help():
+    """Print available functions."""
+    func_list = {}
+    for rule in app.url_map.iter_rules():
+        if rule.endpoint != 'static':
+            func_list[rule.rule] = app.view_functions[rule.endpoint].__doc__
+    return jsonify(func_list)
+
+
 @app.route('/login')
 def show_login():
+    """show the login screen"""
     state = ''.join(
         random.choice(string.ascii_uppercase + string.digits)
         for x in range(32))
