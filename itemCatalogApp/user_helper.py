@@ -30,8 +30,8 @@ def get_user_id(email):
 
 def get_user_by_email(email):
     try:
-        return db.session.query(User).filter_by(email=email).one()
-    except Exception:
+        return db.session.query(User).filter_by(email=email).one_or_none()
+    except MultipleResultsFound:
         return None
 
 
