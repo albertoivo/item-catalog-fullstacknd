@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, \
-    session as login_session
+from flask import Blueprint, render_template, request, flash, redirect,\
+     url_for, session as login_session
 import crud
 import user_helper
 import constants
@@ -12,6 +12,8 @@ item = Blueprint('item', __name__, template_folder='templates')
 # Get all Items by a selected Category
 @item.route('/catalog/<string:category_name>/items')
 def get_items_by_category(category_name):
+    """Get all Items by a selected Category"""
+
     cats = crud.all_categories()
     items_by_category = crud.items_by_category(category_name)
     return render_template(
@@ -22,9 +24,11 @@ def get_items_by_category(category_name):
         login_session=login_session)
 
 
-# Get the selected item description
+# Get the selected item
 @item.route('/catalog/<string:category_name>/<string:item_title>')
 def get_item(category_name, item_title):
+    """Get the selected item"""
+
     cats = crud.all_categories()
     item = crud.item(category_name, item_title)
     return render_template(
@@ -34,6 +38,8 @@ def get_item(category_name, item_title):
 # Add Item
 @item.route('/item/new', methods=['GET', 'POST'])
 def new_item():
+    """Create a new item"""
+
     if not is_user_logged_in(login_session):
         return render_template('forbidden.html')
 
@@ -83,6 +89,8 @@ def new_item():
 # Delete Item
 @item.route('/item/<string:item_id>/delete', methods=['GET', 'POST'])
 def delete_item(item_id):
+    """Delete an item by id"""
+
     if 'username' not in login_session:
         return render_template(
             'forbidden.html',
@@ -109,6 +117,8 @@ def delete_item(item_id):
 # Edit Item
 @item.route('/item/<string:item_id>/edit', methods=['GET', 'POST'])
 def edit_item(item_id):
+    """Edit an item"""
+
     if 'username' not in login_session:
         return render_template(
             'forbidden.html',

@@ -31,6 +31,8 @@ csrf.init_app(app)
 # Main screen
 @app.route('/')
 def main():
+    """The main screen"""
+
     cats = crud.all_categories()
     latest_items = crud.latest_item()
     return render_template(
@@ -41,9 +43,10 @@ def main():
         login_session=login_session)
 
 
-@app.route('/api/help', methods = ['GET'])
+@app.route('/api/help', methods=['GET'])
 def help():
     """Print available functions."""
+
     func_list = {}
     for rule in app.url_map.iter_rules():
         if rule.endpoint != 'static':
@@ -53,7 +56,8 @@ def help():
 
 @app.route('/login')
 def show_login():
-    """show the login screen"""
+    """Shows the login screen"""
+
     state = ''.join(
         random.choice(string.ascii_uppercase + string.digits)
         for x in range(32))
@@ -64,6 +68,8 @@ def show_login():
 
 @app.route('/profile')
 def profile():
+    """User's Profile page"""
+
     app.logger.info('View Profile')
     return render_template('profile.html', login_session=login_session)
 
@@ -71,6 +77,8 @@ def profile():
 # JSON APIs to view Catalog Information
 @app.route('/catalog.json')
 def catalog_json():
+    """The whole catalog format in JSON"""
+
     categories = crud.all_categories()
     items = crud.all_items()
     catalog = {"Category": [cat.serialize for cat in categories]}

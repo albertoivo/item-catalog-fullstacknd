@@ -21,5 +21,4 @@ def is_item_repeated(category_id, item_title):
 # Check if the picture is have an allowed extension
 def allowed_file(filename):
     allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
-    print(filename.rsplit('.', 1)[1].lower() in allowed_extensions)
     return filename.rsplit('.', 1)[1].lower() in allowed_extensions

@@ -4,7 +4,8 @@ import json
 import os
 import user_helper
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
-from flask import Blueprint, request, flash, make_response, redirect, url_for, session as login_session
+from flask import Blueprint, request, flash, make_response, redirect, url_for,\
+    session as login_session
 from flask_wtf import CSRFProtect
 
 csrf = CSRFProtect()
@@ -22,6 +23,8 @@ CLIENT_ID = json.loads(open(client_secrets, 'r').read())['web']['client_id']
 @csrf.exempt
 @google.route('/gconnect', methods=['POST'])
 def gconnect():
+    """Connect with Google SignIn"""
+
     # Validate state token
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter.'), 401)
@@ -149,14 +152,14 @@ def gconnect():
 # Logout - Revoke a current user's token and reset their login_session
 @google.route('/logout')
 def gdisconnect():
-    print("vai desconectar")
+    """Disconnect from google"""
+
     # Only disconnect a connected user.
     access_token = login_session.get('access_token')
     if access_token is None:
         response = make_response(
             json.dumps('Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
-        print("**** 0")
         return response
 
     url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
@@ -169,7 +172,6 @@ def gdisconnect():
         # response = make_response(
         #   json.dumps('Successfully disconnected.'), 200)
         # response.headers['Content-Type'] = 'application/json'
-        print("**** 1")
         return redirect(url_for('main'))
     else:
         # Reset the user's sesson.
@@ -179,5 +181,4 @@ def gdisconnect():
         response = make_response(
             json.dumps('Failed to revoke token for given user.'))
         response.headers['Content-Type'] = 'application/json'
-        print("**** 2")
         return response
