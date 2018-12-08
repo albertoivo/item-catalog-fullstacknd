@@ -4,11 +4,11 @@ import crud
 import user_helper
 from model import Category
 
-category = Blueprint('category', __name__, template_folder='templates')
+category = Blueprint('category', __name__, template_folder='templates', url_prefix='/category')
 
 
 # Add Category
-@category.route('/category/new', methods=['GET', 'POST'])
+@category.route('/new', methods=['GET', 'POST'])
 def new_category():
     """Create a new category"""
 
@@ -26,7 +26,7 @@ def new_category():
 
 
 # Edit Category
-@category.route('/category/<string:category_id>/edit', methods=['GET', 'POST'])
+@category.route('/<string:category_id>/edit', methods=['GET', 'POST'])
 def edit_category(category_id):
     """Edit a category"""
 
@@ -45,7 +45,7 @@ def edit_category(category_id):
 
 
 # Delete Category
-@category.route('/category/<string:cat_id>/delete')
+@category.route('/<string:cat_id>/delete')
 def delete_category(cat_id):
     """Delete a category"""
 
