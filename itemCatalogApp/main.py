@@ -44,7 +44,7 @@ def main():
 
 
 @app.route('/api/help', methods=['GET'])
-def help():
+def api_help():
     """Print available functions."""
 
     func_list = {}
