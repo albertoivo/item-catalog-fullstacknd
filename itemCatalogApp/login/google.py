@@ -103,7 +103,6 @@ def gconnect():
         login_session['username'] = data['name']
         login_session['picture'] = data['picture']
         login_session['email'] = data['email']
-        login_session['gplus'] = data['link']
 
         return response
 
@@ -130,7 +129,6 @@ def gconnect():
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
-    login_session['gplus'] = data['link']
 
     user_id = user_helper.get_user_id(login_session['email'])
     if not user_id:
