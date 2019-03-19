@@ -1,0 +1,27 @@
+{% extends "main.html" %} {% block content %}
+
+<div>
+    <ul class="apis">
+        <li>loading...</li>
+    </ul>
+</div>
+
+<script>
+    const endpoint = 'http://localhost:5000/api/help/JSON'
+
+    function getAPI() {
+        return fetch(endpoint)
+            .then(response => response.json())
+    }
+
+    getAPI()
+        .then(data => {
+            let urls = ''
+            for (let key in data) {
+                urls += `<li>${key} : ${data[key]}</li>`
+            }
+            document.querySelector('.apis').innerHTML = urls
+        })
+</script>
+
+{% endblock %}

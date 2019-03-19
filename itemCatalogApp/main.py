@@ -43,8 +43,8 @@ def main():
         login_session=login_session)
 
 
-@app.route('/api/help', methods=['GET'])
-def api_help():
+@app.route('/api/help/JSON', methods=['GET'])
+def api_help_json():
     """Print available functions."""
 
     func_list = {}
@@ -52,6 +52,13 @@ def api_help():
         if rule.endpoint != 'static':
             func_list[rule.rule] = app.view_functions[rule.endpoint].__doc__
     return jsonify(func_list)
+
+
+@app.route('/api/help', methods=['GET'])
+def api_help():
+    """Shows the api helper screen"""
+
+    return render_template('api_helper.html')
 
 
 @app.route('/login')
