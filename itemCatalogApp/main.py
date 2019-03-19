@@ -97,6 +97,17 @@ def catalog_json():
     return jsonify(catalog)
 
 
+# JSON APIs to view an specific Item Information
+@app.route('/item/<string:item_id>/json')
+def item_json(item_id):
+    """The Item format in JSON"""
+
+    item = crud.item_by_id(item_id)
+
+    app.logger.info('JSON requested')
+    return jsonify(item.serialize)
+
+
 # Error Handler
 @app.errorhandler(404)
 def page_not_found(error):

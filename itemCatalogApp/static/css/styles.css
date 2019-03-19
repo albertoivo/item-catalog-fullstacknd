@@ -269,3 +269,17 @@ h1 {
     display: none;
   }
 }
+
+ul {
+  list-style: none; /* Remove HTML bullets */
+  padding: 0;
+  margin: 10px;
+}
+
+li {
+  margin: 10px;
+}
+
+li > .key {
+  font-weight: bolder;
+}

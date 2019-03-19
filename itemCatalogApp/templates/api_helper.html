@@ -1,27 +1,48 @@
 {% extends "main.html" %} {% block content %}
 
-<div>
-    <ul class="apis">
-        <li>loading...</li>
+  <div>
+    <p>
+      API Rules in JSON format:
+      <a style="color: #f44336" href="http://localhost:5000/api/help/JSON">
+        http://localhost:5000/api/help/JSON
+      </a>
+    </p>
+    <p>
+      Catalog in JSON format:
+      <a style="color: #f44336" href="http://localhost:5000/catalog.json">
+        http://localhost:5000/catalog.json
+      </a>
+    </p>
+    <p>
+      Specific Item in JSON format:
+      <a style="color: #f44336" href="http://localhost:5000/item/1/json">
+        http://localhost:5000/item/< :item_id >/json
+      </a>
+    </p>
+    <p>All the API Rules:</p>
+    <ul id="apis">
+      <li>loading...</li>
     </ul>
-</div>
+  </div>
 
-<script>
+  <script>
     const endpoint = 'http://localhost:5000/api/help/JSON'
 
-    function getAPI() {
-        return fetch(endpoint)
-            .then(response => response.json())
-    }
+    const getAPI = () => fetch(endpoint).then(res => res.json())
 
-    getAPI()
-        .then(data => {
-            let urls = ''
-            for (let key in data) {
-                urls += `<li>${key} : ${data[key]}</li>`
-            }
-            document.querySelector('.apis').innerHTML = urls
-        })
-</script>
+    getAPI().then(data => {
+      let urls = ''
+      for (let key in data) {
+        let newKey = key
+        key = key.replace(/\</g, "&lt;")
+        key = key.replace(/\>/g, "&gt;")
+        urls += `
+            <li>
+                <span class="key">${key}</span> : <span class="data">${data[newKey]}</span>
+            </li>`
+      }
+      document.querySelector('#apis').innerHTML = urls
+    })
+  </script>
 
 {% endblock %}
