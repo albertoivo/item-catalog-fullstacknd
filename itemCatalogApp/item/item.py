@@ -4,7 +4,8 @@ import crud
 import user_helper
 import constants
 from model import Item
-from form_validation import is_user_logged_in, is_item_form_valid, is_item_repeated
+from form_validation import is_user_logged_in, is_item_form_valid,\
+    is_item_repeated
 
 item = Blueprint('item', __name__, template_folder='templates')
 

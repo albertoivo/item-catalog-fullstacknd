@@ -4,7 +4,8 @@ import crud
 import user_helper
 from model import Category
 
-category = Blueprint('category', __name__, template_folder='templates', url_prefix='/category')
+category = Blueprint('category', __name__, template_folder='templates',
+                     url_prefix='/category')
 
 
 # Add Category
