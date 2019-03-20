@@ -3,20 +3,20 @@
   <div>
     <p>
       API Rules in JSON format:
-      <a style="color: #f44336" href="http://localhost:5000/api/help/JSON">
-        http://localhost:5000/api/help/JSON
+      <a style="color: #f44336" href="{{ request.host_url }}api/help/json">
+        {{ request.host_url }}api/help/json
       </a>
     </p>
     <p>
       Catalog in JSON format:
-      <a style="color: #f44336" href="http://localhost:5000/catalog.json">
-        http://localhost:5000/catalog.json
+      <a style="color: #f44336" href="{{ request.host_url }}catalog.json">
+        {{ request.host_url }}catalog.json
       </a>
     </p>
     <p>
       Specific Item in JSON format:
-      <a style="color: #f44336" href="http://localhost:5000/item/1/json">
-        http://localhost:5000/item/< :item_id >/json
+      <a style="color: #f44336" href="{{ request.host_url }}item/1/json">
+        {{ request.host_url }}item/< :item_id >/json
       </a>
     </p>
     <p>All the API Rules:</p>
@@ -26,19 +26,19 @@
   </div>
 
   <script>
-    const endpoint = 'http://localhost:5000/api/help/JSON'
+    const endpoint = '{{ request.host_url }}api/help/json'
 
     const getAPI = () => fetch(endpoint).then(res => res.json())
 
     getAPI().then(data => {
       let urls = ''
       for (let key in data) {
-        let newKey = key
-        key = key.replace(/\</g, "&lt;")
-        key = key.replace(/\>/g, "&gt;")
+        const immutableKey = key
+        key = key.replace(/\</g, '&lt;')
+        key = key.replace(/\>/g, '&gt;')
         urls += `
             <li>
-                <span class="key">${key}</span> : <span class="data">${data[newKey]}</span>
+                <span class="key">${key}</span> : <span class="data">${data[immutableKey]}</span>
             </li>`
       }
       document.querySelector('#apis').innerHTML = urls

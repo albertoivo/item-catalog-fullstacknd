@@ -43,7 +43,7 @@ def main():
         login_session=login_session)
 
 
-@app.route('/api/help/JSON', methods=['GET'])
+@app.route('/api/help/json', methods=['GET'])
 def api_help_json():
     """Print available functions."""
 
