@@ -7,7 +7,7 @@
     </a>
     <a class="logo" href="/">Catalog</a>
     {% if 'username' not in login_session %}
-      <a class="hide-mobile hover-red right" href="{{ url_for('show_login') }}">Login</a>
+      <a class="hide-mobile hover-red right" href="{{ url_for('google.show_login') }}">Login</a>
     {% else %}
       <a id="logout" class="hide-mobile hover-red right" href='/logout'>(Logout)</a>
       <img src="{{ login_session['picture'] }}" alt="user" class="hide-mobile right navbar_pic" />
@@ -21,7 +21,7 @@
   <!-- Navbar on SMALL screens -->
   <div id="bar-mobile" class="bar-block hide-desktop menu-mobile" style="margin-top:46px ">
     {% if 'username' not in login_session %}
-      <a href="{{ url_for('show_login') }}" class="bar-item button hover-red">Login</a> {% else %}
+      <a href="{{ url_for('google.show_login') }}" class="bar-item button hover-red">Login</a> {% else %}
       <div class="welcome">
         <a href="/profile">Welcome, {{ login_session['username'] }}</a>
         <img src="{{ login_session['picture'] }}" alt="user" class="navbar_pic" />

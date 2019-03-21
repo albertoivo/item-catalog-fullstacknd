@@ -1,12 +1,11 @@
 #!/usr/bin/env python
-import random
-import string
 import datetime
+
+import crud
+from category.category import category
 from flask import Flask, jsonify, render_template, session as login_session
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFError
-import crud
-from category.category import category
 from item.item import item
 from login.google import google, csrf
 
@@ -59,18 +58,6 @@ def api_help():
     """Shows the api helper screen"""
 
     return render_template('api_helper.html')
-
-
-@app.route('/login')
-def show_login():
-    """Shows the login screen"""
-
-    state = ''.join(
-        random.choice(string.ascii_uppercase + string.digits)
-        for x in range(32))
-    login_session['state'] = state
-    # return "The current session state is %s" % login_session['state']
-    return render_template('login.html', STATE=state)
 
 
 @app.route('/profile')

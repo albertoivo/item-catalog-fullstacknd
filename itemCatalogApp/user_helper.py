@@ -1,5 +1,5 @@
-from sqlalchemy.orm.exc import MultipleResultsFound
 from model import User, db
+from sqlalchemy.orm.exc import MultipleResultsFound
 
 
 def create_user(login_session):

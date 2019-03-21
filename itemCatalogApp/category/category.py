@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, request, flash, redirect,\
-     url_for, session as login_session
 import crud
 import user_helper
+from flask import Blueprint, render_template, request, flash, redirect, \
+    url_for, session as login_session
 from model import Category
 
 category = Blueprint('category', __name__, template_folder='templates',

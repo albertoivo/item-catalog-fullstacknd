@@ -1,12 +1,15 @@
-import httplib2
-import requests
 import json
 import os
+import random
+import string
+
+import httplib2
+import requests
 import user_helper
-from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
-from flask import Blueprint, request, flash, make_response, redirect, url_for,\
-    session as login_session
+from flask import Blueprint, request, flash, make_response, redirect, url_for, \
+    render_template, session as login_session
 from flask_wtf import CSRFProtect
+from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 
 csrf = CSRFProtect()
 
@@ -164,7 +167,7 @@ def gdisconnect():
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
     if result['status'] == '200':
-        # Reset the user's sesson.
+        # Reset the user's session.
         user_helper.delete_login_session(login_session)
 
         # response = make_response(
@@ -172,7 +175,7 @@ def gdisconnect():
         # response.headers['Content-Type'] = 'application/json'
         return redirect(url_for('main'))
     else:
-        # Reset the user's sesson.
+        # Reset the user's session.
         user_helper.delete_login_session(login_session)
 
         # For whatever reason, the given token was invalid.
@@ -180,3 +183,16 @@ def gdisconnect():
             json.dumps('Failed to revoke token for given user.'))
         response.headers['Content-Type'] = 'application/json'
         return response
+
+
+@google.route('/login')
+def show_login():
+    """Shows the login screen"""
+
+    state = ''.join(
+        random.choice(string.ascii_uppercase + string.digits)
+        for x in range(32))
+    login_session['state'] = state
+
+    # return "The current session state is %s" % login_session['state']
+    return render_template('login.html', STATE=state)
